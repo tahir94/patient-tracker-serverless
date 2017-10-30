@@ -7,8 +7,19 @@
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+	<div class="div_h2">
+		<h2 class="h2">Plaease Add A Patient</h2>
+		<hr>
+
+		<button ion-button color="primary" round (click)="add()">Add Patient</button>
+	</div>
+
+	<div *ngIf="isPatientList">
+		<ion-list>
+			<button style="color :#1B8BD7;font-size: 1.3em" class="list-button" ion-item *ngFor="let a of patientData; let i = index"
+			 (click)="itemTapped(a,i)">
+						  {{a.patientName}}
+			</button>
+		</ion-list>
+	</div>
 </ion-content>
