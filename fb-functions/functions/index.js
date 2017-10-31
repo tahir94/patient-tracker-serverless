@@ -88,7 +88,10 @@ const admin = __webpack_require__(2);
 // };
 admin.initializeApp(functions.config().firebase);
 const addPatient_1 = __webpack_require__(3);
+const auth_1 = __webpack_require__(6);
 exports.addPatient = addPatient_1.listener;
+exports.signup = auth_1.signupListener;
+exports.login = auth_1.loginListener;
 // import db from './db'
 exports.firestore = functions.firestore;
 // export const makeUpperCase = UpCaseMessages.listener
@@ -168,6 +171,38 @@ class PatientClass {
     }
 }
 exports.PatientClass = PatientClass;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const functions = __webpack_require__(0);
+const _cors = __webpack_require__(4);
+let cors = _cors({ origin: true });
+exports.signupListener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
+    cors(req, res, () => {
+        console.log('check signup', req.body);
+        res.send('signup seccuess');
+    });
+}));
+exports.loginListener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
+    cors(req, res, () => {
+        console.log('check login', req.body);
+        res.send('login seccuess');
+    });
+}));
 
 
 /***/ })
