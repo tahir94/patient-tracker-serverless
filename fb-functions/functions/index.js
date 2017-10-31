@@ -78,11 +78,25 @@ module.exports = require("firebase-functions");
 Object.defineProperty(exports, "__esModule", { value: true });
 const functions = __webpack_require__(0);
 const admin = __webpack_require__(2);
-// import * as UpCaseMessages from './upcase-messages'
+// var config = {
+// 	apiKey: "AIzaSyCAyEGLfGYJ0SOZsB1a16vCAt4LLDFYeuY",
+// 	authDomain: "patient-tracker-b35bc.firebaseapp.com",
+// 	databaseURL: "https://patient-tracker-b35bc.firebaseio.com",
+// 	projectId: "patient-tracker-b35bc",
+// 	storageBucket: "patient-tracker-b35bc.appspot.com",
+// 	messagingSenderId: "929949000487"
+// };
 admin.initializeApp(functions.config().firebase);
 const addPatient_1 = __webpack_require__(3);
 exports.addPatient = addPatient_1.listener;
-// export const makeUpperCase = UpCaseMessages.listener 
+// import db from './db'
+exports.firestore = functions.firestore;
+// export const makeUpperCase = UpCaseMessages.listener
+// admin.initializeApp(functions.config().firestore);
+// export const firestore = admin.firestore();
+//   firestore.initializeApp(config)
+// admin.initializeApp(functions.config().firestore);
+// admin.initializeApp(config); 
 
 
 /***/ }),
@@ -108,12 +122,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const functions = __webpack_require__(0);
 const _cors = __webpack_require__(4);
+const patient_1 = __webpack_require__(5);
 let cors = _cors({ origin: true });
 exports.listener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
     cors(req, res, () => {
         console.log('check', req.body);
+        patient_1.PatientClass.addPatient(req.body).then((success) => {
+            console.log(success);
+        }).catch((err) => {
+            console.log(err);
+        });
         res.send('hello world');
-        // PatientClass.addPatient(req.body)
     });
 }));
 
@@ -123,6 +142,33 @@ exports.listener = functions.https.onRequest((req, res) => __awaiter(this, void 
 /***/ (function(module, exports) {
 
 module.exports = require("cors");
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const admin = __webpack_require__(2);
+const functions = __webpack_require__(0);
+const docRef = admin.firestore().collection("users");
+class PatientClass {
+    static addPatient(getData) {
+        return new Promise((resolve, reject) => {
+            console.log('GET dATA', getData);
+            docRef.doc().set(getData).then(() => {
+                console.log('Status Saved!');
+                resolve('success');
+            }).catch((error) => {
+                console.log('got an error');
+                reject('failed');
+            });
+        });
+    }
+}
+exports.PatientClass = PatientClass;
+
 
 /***/ })
 /******/ ])));

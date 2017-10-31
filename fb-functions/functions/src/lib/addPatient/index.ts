@@ -8,7 +8,14 @@ let cors = _cors({ origin: true });
 export const listener = functions.https.onRequest(async (req: Request, res: Response) => {
 	cors(req, res, () => {
 		console.log('check',req.body);
+		
+		PatientClass.addPatient(req.body).then((success)=>{
+			console.log(success);
+			
+		}).catch((err)=>{
+			console.log(err);
+			
+		})
 		res.send('hello world')
-		PatientClass.addPatient(req.body)
 	})
 })
