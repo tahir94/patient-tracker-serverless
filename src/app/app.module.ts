@@ -8,6 +8,8 @@ import { HttpModule } from '@angular/http';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { PatientFormPage } from "../pages/patient-form/patient-form";
+import { LoginPage } from "../pages/login/login";
+import { SignupPage } from "../pages/signup/signup";
 
 // redux imports
 import { combineReducers } from 'redux'
@@ -20,7 +22,9 @@ import { PatientEpic } from '../epics';
   declarations: [
     MyApp,
 	HomePage,
-	PatientFormPage
+	PatientFormPage,
+	LoginPage,
+	SignupPage
   ],
   imports: [
     BrowserModule,
@@ -32,7 +36,9 @@ import { PatientEpic } from '../epics';
   entryComponents: [
     MyApp,
 	HomePage,
-	PatientFormPage
+	PatientFormPage,
+	LoginPage,
+	SignupPage
   ],
   providers: [
 	PatientEpic,
