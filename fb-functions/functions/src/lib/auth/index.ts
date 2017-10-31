@@ -20,3 +20,12 @@ export const loginListener = functions.https.onRequest(async (req: Request, res 
 		res.send('login seccuess');
 	})
 })
+
+// exports.checkUser = functions.auth.user().onCreate(event => {
+// 	console.log('event',event)
+//   });
+
+export const checkUserListener = functions.auth.user().onCreate(event => {
+	console.log('event',event.data)
+
+  });

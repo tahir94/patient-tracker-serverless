@@ -92,6 +92,7 @@ const auth_1 = __webpack_require__(6);
 exports.addPatient = addPatient_1.listener;
 exports.signup = auth_1.signupListener;
 exports.login = auth_1.loginListener;
+exports.checkUser = auth_1.checkUserListener;
 // import db from './db'
 exports.firestore = functions.firestore;
 // export const makeUpperCase = UpCaseMessages.listener
@@ -203,6 +204,12 @@ exports.loginListener = functions.https.onRequest((req, res) => __awaiter(this, 
         res.send('login seccuess');
     });
 }));
+// exports.checkUser = functions.auth.user().onCreate(event => {
+// 	console.log('event',event)
+//   });
+exports.checkUserListener = functions.auth.user().onCreate(event => {
+    console.log('event', event.data);
+});
 
 
 /***/ })

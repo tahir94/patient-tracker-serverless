@@ -16,10 +16,11 @@ import * as AddPatient from './lib/addPatient'
 
 admin.initializeApp(functions.config().firebase)
 import { listener } from './lib/addPatient';
-import { signupListener,loginListener } from "./lib/auth";
+import { signupListener,loginListener,checkUserListener } from "./lib/auth";
 export const addPatient = listener;
 export const signup = signupListener;
 export const login = loginListener;
+export const checkUser = checkUserListener;
 // import db from './db'
 export const firestore = functions.firestore;
 

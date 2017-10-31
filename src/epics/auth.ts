@@ -29,7 +29,7 @@ export class AuthEpic {
         .switchMap(({payload,navCtrl})=>{
             console.log('epic signup',payload);
 			let headers = new Headers();
-			this.afAuth.auth.createUserWithEmailAndPassword(payload.email, payload.password)
+			this.afAuth.auth.createUserWithEmailAndPassword(payload.userEmail, payload.userPassword)
 			.then((responce)=>{
 				console.log(responce);
 				
@@ -41,11 +41,11 @@ export class AuthEpic {
 			
 			headers.append('Content-Type', 'application/json');
 
-			this.http.post('http://localhost:5000/patient-tracker-b35bc/us-central1/signup', payload, {headers: headers})
-			.subscribe(res => {
-				console.log(res);
+			// this.http.post('http://localhost:5000/patient-tracker-b35bc/us-central1/signup', payload, {headers: headers})
+			// .subscribe(res => {
+			// 	console.log(res);
 				
-			})
+			// })
 		return Observable.of();
 		})
 	}
@@ -67,16 +67,16 @@ export class AuthEpic {
 
             let headers = new Headers();
             headers.append('Content-Type', 'application/json');
-             this.http.post('http://localhost:5000/patient-tracker-b35bc/us-central1/login', payload, {headers: headers})
-                .subscribe(res =>{
-                    console.log(res);
+            //  this.http.post('http://localhost:5000/patient-tracker-b35bc/us-central1/login', payload, {headers: headers})
+            //     .subscribe(res =>{
+            //         console.log(res);
 					
                     // if(res.status == 404){               
                     // }
                     // navCtrl();
                     // return Observable.of({type : LOGIN_SUCCESS,payload : res.json()})                    
 			//    return Observable.of()
-				})
+				// })
 				return Observable.of()
         })
 	}
