@@ -11,6 +11,8 @@ import {
 	SET_DATA_LOCALLLY, LOCAL_DATA_SUCCESS
 } from "../actions/patient";
 
+import { AngularFireAuth } from "angularfire2/auth";
+
 // rxjs imports
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -23,7 +25,7 @@ import 'rxjs/add/observable/fromPromise';
 @Injectable()
 
 export class PatientEpic {
-	constructor(private http: Http) {
+	constructor(private http: Http,private afAuth : AngularFireAuth) {
 
 	}
 	Patient = (actions$: ActionsObservable<any>) => {
@@ -33,7 +35,8 @@ export class PatientEpic {
 				let headers = new Headers();
 
 				headers.append('Content-Type', 'application/json');
-				let url = 'https://us-central1-patient-tracker-b35bc.cloudfunctions.net/addPatient';
+				let url = 'http://localhost:5000/patient-tracker-b35bc/us-central1/addPatient';
+				payload['userId'] = this.afAuth.auth.currentUser.uid;
 				this.http.post(url, payload, { headers: headers })
 					.subscribe()
 				return Observable.of({ type: ADD_PATIENT_SUCCESS, payload: payload });
