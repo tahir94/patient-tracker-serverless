@@ -36,10 +36,10 @@ export class PatientClass {
 		return new Promise((resolve,reject)=>{
 
 			console.log('db currentUid',currentUserUid);
-			patientRef.doc(currentUserUid).get().then((doc=>{
+			patientRef.doc(currentUserUid).get().then((doc => {
 				if(doc.exists){
 					console.log('document data',doc.data());
-					
+					resolve(doc.data())
 				}
 				else {
 					console.log('no such document');
@@ -47,7 +47,7 @@ export class PatientClass {
 				}
 			})).catch((error)=>{
 				console.log('error document',error);
-				
+				reject(error)
 			})
 			// .then((success)=>{
 			// 	console.log(success);

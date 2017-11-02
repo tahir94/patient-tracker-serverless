@@ -209,8 +209,13 @@ exports.listener = functions.https.onRequest((req, res) => __awaiter(this, void 
 exports.getPatientListener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
     cors(req, res, () => {
         console.log('server get func !', req.query.uid);
-        patient_1.PatientClass.getPatient(req.query.uid);
-        res.send('get patient success');
+        patient_1.PatientClass.getPatient(req.query.uid).then((success) => {
+            console.log('get server success', success);
+            res.send(success);
+        }).catch((error) => {
+            console.log('get server error', error);
+            res.send(error);
+        });
     });
 }));
 
@@ -250,12 +255,14 @@ class PatientClass {
             patientRef.doc(currentUserUid).get().then((doc => {
                 if (doc.exists) {
                     console.log('document data', doc.data());
+                    resolve(doc.data());
                 }
                 else {
                     console.log('no such document');
                 }
             })).catch((error) => {
                 console.log('error document', error);
+                reject(error);
             });
             // .then((success)=>{
             // 	console.log(success);

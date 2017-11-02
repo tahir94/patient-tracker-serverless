@@ -38,7 +38,10 @@ export class PatientEpic {
 				let url = 'http://localhost:5000/patient-tracker-b35bc/us-central1/addPatient';
 				payload['userId'] = this.afAuth.auth.currentUser.uid;
 				this.http.post(url, payload, { headers: headers })
-					.subscribe()
+					.subscribe((res)=>{
+						console.log(res);
+						
+					})
 				return Observable.of({ type: ADD_PATIENT_SUCCESS, payload: payload });
 			})
 	}
@@ -55,7 +58,10 @@ export class PatientEpic {
 
 			this.http.get('http://localhost:5000/patient-tracker-b35bc/us-central1/getPatients/?uid=' + currentUserUid)
 			.subscribe((res => {
-				console.log(res);				
+				console.log(res.json());	
+				let a = Object.keys(res.json())
+				console.log(a);
+				
 			}))
 			return Observable.of()
 		})

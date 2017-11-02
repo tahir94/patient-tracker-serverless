@@ -1,5 +1,5 @@
 import { tassign } from 'tassign';
-import { SIGNUP_SUCCESS,SIGNUP_FAILED } from "../actions/auth";
+import { SIGNUP_SUCCESS,SIGNUP_FAILED,LOGIN_SUCCESS,LOGIN_FAILED } from "../actions/auth";
 
 
 export interface AuthState {
@@ -25,7 +25,14 @@ export const AuthReducer = (state: AuthState = AUTH_INITIAL_STATE, action) => {
 		case SIGNUP_FAILED:
 		console.log(action.payload);
 		
-		return tassign({errorMessagess : action.payload})
+		return tassign({errorMessagess : action.payload});
+
+		case LOGIN_SUCCESS:
+		console.log(action.payload);
+		
+		case LOGIN_FAILED:
+		console.log(action.payload);
+		
 	
 		default:
 			return state;

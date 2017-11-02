@@ -67,7 +67,7 @@ export class AuthEpic {
 						payload.uid = this.afAuth.auth.currentUser.uid;
 					return this.http.post('http://localhost:5000/patient-tracker-b35bc/us-central1/login', payload, {headers: headers})
 						    .switchMap(res =>{
-								console.log(res);
+								console.log(res.json());
 								navCtrl();
 								return Observable.of({type : LOGIN_SUCCESS,payload : payload})
 							}).catch((error)=>{
