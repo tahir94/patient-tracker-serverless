@@ -63,7 +63,8 @@ export class PatientEpic {
 				console.log(patientUids);
 				this.http.get('http://localhost:5000/patient-tracker-b35bc/us-central1/fetchPatients/?patientUids=' + patientUids)
 				.subscribe((res => {
-					console.log('fetch epic',res);
+
+					console.log('fetch epic',res.json());
 					
 				}))
 			}))

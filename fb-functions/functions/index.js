@@ -224,8 +224,10 @@ exports.fetchPatientsListener = functions.https.onRequest((req, res) => __awaite
         console.log('server fetch patients', req.query.patientUids);
         patient_1.PatientClass.fetchPatients(req.query.patientUids).then((success) => {
             console.log('fetch success', success);
+            res.send(success);
         }).catch((error => {
             console.log('fetch error', error);
+            res.send(error);
         }));
     });
 }));
@@ -283,21 +285,43 @@ class PatientClass {
         });
     }
     static fetchPatients(patientUids) {
-        console.log('db fetch!', patientUids);
+        // console.log('db fetch!', patientUids);
         return new Promise((resolve, reject) => {
-            docRef.doc().get().then((doc) => {
-                if (doc.exists) {
-                    console.log('fetch doc data', doc.data());
-                    resolve(doc.data);
-                }
-                else {
-                    console.log('nothing in fetch doc');
-                }
+            // docRef.get().then((doc)=>{
+            docRef.get().then((querySnapshot) => {
+                let pat1 = [];
+                querySnapshot.forEach((doc) => {
+                    // console.log(doc.id, " =>------ ", doc.data());
+                    // console.log('in forEach uids', patientUids);
+                    let fil = patientUids.split(',').map((abc) => {
+                        if (abc.toLowerCase() === doc.id.toLowerCase()) {
+                            console.log("doctadsad ", doc.data());
+                            return doc.data();
+                        }
+                    });
+                    if (fil.length) {
+                        pat1.push(...fil);
+                    }
+                    // if (doc.id == patientUids) {
+                    // 	console.log('if uids', doc.id, "=====", doc.data());
+                    // }
+                    console.warn(' ======----=======----------=== ', fil);
+                });
+                console.log('#########################', pat1);
+                resolve(pat1);
             }).catch((error) => {
                 console.log('error in fetch doc', error);
                 reject(error);
             });
+            // if(doc.docs){
+            // 	console.log('fetch doc data',doc.docs);
+            // 	resolve(doc.docs)					
+            // }
+            // else {
+            // 	console.log('nothing in fetch doc', doc.docs);					
+            // }
         });
+        // })
     }
 }
 exports.PatientClass = PatientClass;
