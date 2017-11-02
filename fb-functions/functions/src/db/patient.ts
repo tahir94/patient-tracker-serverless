@@ -6,6 +6,7 @@ import { firestore } from '../';
 
 
 const docRef = admin.firestore().collection("patients");
+const patientRef = admin.firestore().collection('doctorPatientsUids');
 
 export class PatientClass {
 
@@ -32,7 +33,29 @@ export class PatientClass {
 	}
 
 	static getPatient(currentUserUid : any){
-		console.log('db currentUid',currentUserUid);
-		
+		return new Promise((resolve,reject)=>{
+
+			console.log('db currentUid',currentUserUid);
+			patientRef.doc(currentUserUid).get().then((doc=>{
+				if(doc.exists){
+					console.log('document data',doc.data());
+					
+				}
+				else {
+					console.log('no such document');
+					
+				}
+			})).catch((error)=>{
+				console.log('error document',error);
+				
+			})
+			// .then((success)=>{
+			// 	console.log(success);
+				
+			// }).catch((error)=>{
+			// 	reject()
+			// })
+
+		})
 	}
 }

@@ -6,7 +6,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 
 import { NgRedux, select } from "ng2-redux";
 import { AppState } from '../reducers/rootReducer';
-import { SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAILED } from "../actions/auth";
+import { SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAILED,LOGIN_FAILED } from "../actions/auth";
 // rxjs imports
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -59,21 +59,27 @@ export class AuthEpic {
 			.switchMap(({ payload, navCtrl }) => {
 				console.log('epic login', payload);
 
-				this.afAuth.auth.signInWithEmailAndPassword(payload.email, payload.password)
-					.then((responce) => {
+			return Observable.fromPromise(this.afAuth.auth.signInWithEmailAndPassword(payload.userEmail, payload.userPassword))
+					.switchMap((responce) => {
 						console.log(responce);
+						let headers = new Headers();
+						headers.append('Content-Type', 'application/json');
+						payload.uid = this.afAuth.auth.currentUser.uid;
+					return this.http.post('http://localhost:5000/patient-tracker-b35bc/us-central1/login', payload, {headers: headers})
+						    .switchMap(res =>{
+								console.log(res);
+								navCtrl();
+								return Observable.of({type : LOGIN_SUCCESS,payload : payload})
+							}).catch((error)=>{
+								console.log(error);
+								return Observable.of({type : LOGIN_FAILED,payload : error.message})
+							})
+					// })
+					// .catch((error) => {
+					// 	console.log(error);
 
-					})
-					.catch((error) => {
-						console.log(error);
+					// })
 
-					})
-
-				let headers = new Headers();
-				headers.append('Content-Type', 'application/json');
-				//  this.http.post('http://localhost:5000/patient-tracker-b35bc/us-central1/login', payload, {headers: headers})
-				//     .subscribe(res =>{
-				//         console.log(res);
 
 				// if(res.status == 404){               
 				// }
@@ -81,7 +87,8 @@ export class AuthEpic {
 				// return Observable.of({type : LOGIN_SUCCESS,payload : res.json()})                    
 				//    return Observable.of()
 				// })
-				return Observable.of()
+				// return Observable.of()
+			})
 			})
 	}
 

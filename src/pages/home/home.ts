@@ -22,9 +22,9 @@ export class HomePage implements OnInit {
 
   ngOnInit(){
 
-		this.ngRedux.dispatch({
-			type : GET_PATIENT
-		})
+		// this.ngRedux.dispatch({
+		// 	type : GET_PATIENT
+		// })
 
 	  this.userData$.subscribe((data)=>{
 		if(data){

@@ -9,8 +9,26 @@ const patientRef = admin.firestore().collection('doctorPatientsUids');
 export class AuthClass {
 currentUid : any;
 	constructor(public afAuth : AngularFireAuth){}
-	static Login(){
-
+	static Login(currentUserUid : Object){
+		return new Promise((resolve,reject)=>{
+			console.log('check type of',typeof currentUserUid);
+			console.log('check type of',currentUserUid);
+			
+			userRef.doc(currentUserUid.uid).get().then((doc)=>{
+				console.log('db uid log',currentUserUid);
+				if(doc.exists){
+					console.log(doc.data());
+					resolve(doc.data())
+				}
+				else { 
+					console.log('no document exists');
+				}
+				
+			}).catch((error)=>{
+				console.log('doc error',error);
+				reject(error)
+			})
+		})
 	}
 	static Signup(userData : any){
 		return new Promise((resolve,reject)=>{

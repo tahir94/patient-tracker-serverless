@@ -95,7 +95,24 @@ class AuthClass {
     constructor(afAuth) {
         this.afAuth = afAuth;
     }
-    static Login() {
+    static Login(currentUserUid) {
+        return new Promise((resolve, reject) => {
+            console.log('check type of', typeof currentUserUid);
+            console.log('check type of', currentUserUid);
+            userRef.doc(currentUserUid.uid).get().then((doc) => {
+                console.log('db uid log', currentUserUid);
+                if (doc.exists) {
+                    console.log(doc.data());
+                    resolve(doc.data());
+                }
+                else {
+                    console.log('no document exists');
+                }
+            }).catch((error) => {
+                console.log('doc error', error);
+                reject(error);
+            });
+        });
     }
     static Signup(userData) {
         return new Promise((resolve, reject) => {
@@ -208,6 +225,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const admin = __webpack_require__(1);
 const functions = __webpack_require__(0);
 const docRef = admin.firestore().collection("patients");
+const patientRef = admin.firestore().collection('doctorPatientsUids');
 class PatientClass {
     static addPatient(getData) {
         return new Promise((resolve, reject) => {
@@ -227,7 +245,24 @@ class PatientClass {
         });
     }
     static getPatient(currentUserUid) {
-        console.log('db currentUid', currentUserUid);
+        return new Promise((resolve, reject) => {
+            console.log('db currentUid', currentUserUid);
+            patientRef.doc(currentUserUid).get().then((doc => {
+                if (doc.exists) {
+                    console.log('document data', doc.data());
+                }
+                else {
+                    console.log('no such document');
+                }
+            })).catch((error) => {
+                console.log('error document', error);
+            });
+            // .then((success)=>{
+            // 	console.log(success);
+            // }).catch((error)=>{
+            // 	reject()
+            // })
+        });
     }
 }
 exports.PatientClass = PatientClass;
@@ -268,7 +303,13 @@ exports.signupListener = functions.https.onRequest((req, res) => __awaiter(this,
 exports.loginListener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
     cors(req, res, () => {
         console.log('check login', req.body);
-        res.send('login seccuess');
+        auth_1.AuthClass.Login(req.body).then((success) => {
+            console.log('login success', success);
+            res.send(success);
+        }).catch((error) => {
+            console.log(error);
+            res.send(error);
+        });
     });
 }));
 // exports.checkUser = functions.auth.user().onCreate(event => {
