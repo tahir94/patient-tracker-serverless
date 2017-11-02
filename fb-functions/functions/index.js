@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -88,6 +88,47 @@ module.exports = require("cors");
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const admin = __webpack_require__(1);
+const userRef = admin.firestore().collection('users');
+const patientRef = admin.firestore().collection('doctorPatientsUids');
+class AuthClass {
+    constructor(afAuth) {
+        this.afAuth = afAuth;
+    }
+    static Login() {
+    }
+    static Signup(userData) {
+        return new Promise((resolve, reject) => {
+            userRef.doc(userData.uid).set({
+                userEmail: userData.userEmail,
+                userName: userData.userName,
+                userPassword: userData.userPassword
+            }).then((resolve) => {
+                console.log('signup data success');
+            }).catch((reject) => {
+                console.log('signup data reject');
+            });
+        });
+    }
+    static OnPatientSuccess(usersUids) {
+        return new Promise((resolve, reject) => {
+            // userRef.doc(usersUids.user_id).update({patients : [{patientUids : usersUids.push_id,when: new Date()}]},{ merge: true })
+            patientRef.doc(usersUids.user_id).update({ [usersUids.push_id]: true }).catch(a => {
+                patientRef.doc(usersUids.user_id).create({ [usersUids.push_id]: true });
+            });
+        });
+    }
+}
+exports.AuthClass = AuthClass;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 const functions = __webpack_require__(0);
 const admin = __webpack_require__(1);
 // var config = {
@@ -99,8 +140,8 @@ const admin = __webpack_require__(1);
 // 	messagingSenderId: "929949000487"
 // };
 admin.initializeApp(functions.config().firebase);
-const addPatient_1 = __webpack_require__(4);
-const auth_1 = __webpack_require__(6);
+const addPatient_1 = __webpack_require__(5);
+const auth_1 = __webpack_require__(7);
 exports.addPatient = addPatient_1.listener;
 exports.signup = auth_1.signupListener;
 exports.login = auth_1.loginListener;
@@ -116,7 +157,7 @@ exports.firestore = functions.firestore;
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -132,8 +173,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const functions = __webpack_require__(0);
 const _cors = __webpack_require__(2);
-const patient_1 = __webpack_require__(5);
-const auth_1 = __webpack_require__(7);
+const patient_1 = __webpack_require__(6);
+const auth_1 = __webpack_require__(3);
 let cors = _cors({ origin: true });
 exports.listener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
     cors(req, res, () => {
@@ -150,7 +191,7 @@ exports.listener = functions.https.onRequest((req, res) => __awaiter(this, void 
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -182,7 +223,7 @@ exports.PatientClass = PatientClass;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -198,7 +239,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const functions = __webpack_require__(0);
 const _cors = __webpack_require__(2);
-const auth_1 = __webpack_require__(7);
+const auth_1 = __webpack_require__(3);
 let cors = _cors({ origin: true });
 exports.signupListener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
     cors(req, res, () => {
@@ -225,46 +266,6 @@ exports.loginListener = functions.https.onRequest((req, res) => __awaiter(this, 
 exports.checkUserListener = functions.auth.user().onCreate(event => {
     console.log('event', event.data);
 });
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const admin = __webpack_require__(1);
-const userRef = admin.firestore().collection('users');
-class AuthClass {
-    constructor(afAuth) {
-        this.afAuth = afAuth;
-    }
-    static Login() {
-    }
-    static Signup(userData) {
-        return new Promise((resolve, reject) => {
-            userRef.doc(userData.uid).set({
-                userEmail: userData.userEmail,
-                userName: userData.userName,
-                userPassword: userData.userPassword
-            }).then((resolve) => {
-                console.log('signup data success');
-            }).catch((reject) => {
-                console.log('signup data reject');
-            });
-        });
-    }
-    static OnPatientSuccess(usersUids) {
-        return new Promise((resolve, reject) => {
-            // userRef.doc(usersUids.user_id).update({patients : [{patientUids : usersUids.push_id,when: new Date()}]},{ merge: true })
-            userRef.doc(usersUids.user_id).collection('patients').add({ patientsUids: usersUids.push_id });
-            // { sharedWith: [{ who: "third@test.com", when: new Date() }] },
-            // { merge: true }
-        });
-    }
-}
-exports.AuthClass = AuthClass;
 
 
 /***/ })
