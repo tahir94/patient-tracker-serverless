@@ -143,6 +143,7 @@ admin.initializeApp(functions.config().firebase);
 const addPatient_1 = __webpack_require__(5);
 const auth_1 = __webpack_require__(7);
 exports.addPatient = addPatient_1.listener;
+exports.getPatients = addPatient_1.getPatientListener;
 exports.signup = auth_1.signupListener;
 exports.login = auth_1.loginListener;
 exports.checkUser = auth_1.checkUserListener;
@@ -188,6 +189,13 @@ exports.listener = functions.https.onRequest((req, res) => __awaiter(this, void 
         res.send('hello world');
     });
 }));
+exports.getPatientListener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
+    cors(req, res, () => {
+        console.log('server get func !', req.query.uid);
+        patient_1.PatientClass.getPatient(req.query.uid);
+        res.send('get patient success');
+    });
+}));
 
 
 /***/ }),
@@ -217,6 +225,9 @@ class PatientClass {
                 reject('failed');
             });
         });
+    }
+    static getPatient(currentUserUid) {
+        console.log('db currentUid', currentUserUid);
     }
 }
 exports.PatientClass = PatientClass;

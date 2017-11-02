@@ -25,3 +25,12 @@ export const listener = functions.https.onRequest(async (req: Request, res: Resp
 		res.send('hello world')
 	})
 })
+
+export const getPatientListener = functions.https.onRequest(async (req : Request,res : Response)=> {
+	cors(req,res, () =>  {
+		console.log('server get func !', req.query.uid);
+		PatientClass.getPatient(req.query.uid);
+
+		res.send('get patient success')
+	})
+})

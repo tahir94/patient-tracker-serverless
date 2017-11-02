@@ -5,6 +5,8 @@ import { NgRedux,select } from "ng2-redux";
 import { AppState } from "../../reducers/rootReducer";
 import { Observable } from "rxjs";
 
+import { GET_PATIENT } from "../../actions/patient";
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -19,6 +21,11 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit(){
+
+		this.ngRedux.dispatch({
+			type : GET_PATIENT
+		})
+
 	  this.userData$.subscribe((data)=>{
 		if(data){
 			console.log(data);

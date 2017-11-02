@@ -74,6 +74,7 @@ export class AppModule {
 
 			const middleware = [
 				createEpicMiddleware(this.patientEpic.Patient),
+				createEpicMiddleware(this.patientEpic.GetPatient),
 				createEpicMiddleware(this.authEpic.Login),
 				createEpicMiddleware(this.authEpic.Signup),
 			]

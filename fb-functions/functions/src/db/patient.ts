@@ -30,4 +30,9 @@ export class PatientClass {
 
 		});
 	}
+
+	static getPatient(currentUserUid : any){
+		console.log('db currentUid',currentUserUid);
+		
+	}
 }

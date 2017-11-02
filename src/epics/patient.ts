@@ -42,4 +42,22 @@ export class PatientEpic {
 				return Observable.of({ type: ADD_PATIENT_SUCCESS, payload: payload });
 			})
 	}
+
+	GetPatient = (actions$ : ActionsObservable<any>)=>{
+		return actions$.ofType(GET_PATIENT)
+		.switchMap(()=>{
+			console.log('get patient epic');
+			
+			let headers = new Headers();
+			headers.append('Content-Type','application/json');
+			
+			let currentUserUid = this.afAuth.auth.currentUser.uid;
+
+			this.http.get('http://localhost:5000/patient-tracker-b35bc/us-central1/getPatients/?uid=' + currentUserUid)
+			.subscribe((res => {
+				console.log(res);				
+			}))
+			return Observable.of()
+		})
+	}
 }
