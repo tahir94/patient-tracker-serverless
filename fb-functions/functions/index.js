@@ -161,6 +161,7 @@ const addPatient_1 = __webpack_require__(5);
 const auth_1 = __webpack_require__(7);
 exports.addPatient = addPatient_1.listener;
 exports.getPatients = addPatient_1.getPatientListener;
+exports.fetchPatients = addPatient_1.fetchPatientsListener;
 exports.signup = auth_1.signupListener;
 exports.login = auth_1.loginListener;
 exports.checkUser = auth_1.checkUserListener;
@@ -218,6 +219,16 @@ exports.getPatientListener = functions.https.onRequest((req, res) => __awaiter(t
         });
     });
 }));
+exports.fetchPatientsListener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
+    cors(req, res, () => {
+        console.log('server fetch patients', req.query.patientUids);
+        patient_1.PatientClass.fetchPatients(req.query.patientUids).then((success) => {
+            console.log('fetch success', success);
+        }).catch((error => {
+            console.log('fetch error', error);
+        }));
+    });
+}));
 
 
 /***/ }),
@@ -269,6 +280,23 @@ class PatientClass {
             // }).catch((error)=>{
             // 	reject()
             // })
+        });
+    }
+    static fetchPatients(patientUids) {
+        console.log('db fetch!', patientUids);
+        return new Promise((resolve, reject) => {
+            docRef.doc().get().then((doc) => {
+                if (doc.exists) {
+                    console.log('fetch doc data', doc.data());
+                    resolve(doc.data);
+                }
+                else {
+                    console.log('nothing in fetch doc');
+                }
+            }).catch((error) => {
+                console.log('error in fetch doc', error);
+                reject(error);
+            });
         });
     }
 }

@@ -58,4 +58,24 @@ export class PatientClass {
 
 		})
 	}
+
+	static fetchPatients(patientUids : any){
+		console.log('db fetch!',patientUids);
+		return new Promise((resolve,reject)=>{
+			docRef.doc().get().then((doc)=>{
+				if(doc.exists){
+					console.log('fetch doc data',doc.data());
+					resolve(doc.data)					
+				}
+				else {
+					console.log('nothing in fetch doc');					
+				}
+			}).catch((error)=>{
+				console.log('error in fetch doc',error);
+				reject(error)				
+			})
+		})
+		
+
+	}
 }

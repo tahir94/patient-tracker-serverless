@@ -59,9 +59,13 @@ export class PatientEpic {
 			this.http.get('http://localhost:5000/patient-tracker-b35bc/us-central1/getPatients/?uid=' + currentUserUid)
 			.subscribe((res => {
 				console.log(res.json());	
-				let a = Object.keys(res.json())
-				console.log(a);
-				
+				let patientUids = Object.keys(res.json())
+				console.log(patientUids);
+				this.http.get('http://localhost:5000/patient-tracker-b35bc/us-central1/fetchPatients/?patientUids=' + patientUids)
+				.subscribe((res => {
+					console.log('fetch epic',res);
+					
+				}))
 			}))
 			return Observable.of()
 		})
