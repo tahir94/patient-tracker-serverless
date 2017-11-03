@@ -38,8 +38,8 @@ export class LoginPage {
         //     userPassword: [null, Validators.compose([Validators.minLength(6), Validators.required])]
 		// })
 		this.loginForm = this.fb.group({
-			userEmail : '',
-			userPassword : ''
+			userEmail : 'b@a.com',
+			userPassword : '000000'
 		})
     }
 
@@ -49,7 +49,7 @@ export class LoginPage {
             payload: this.loginForm.value,
             navCtrl: () => this.navCtrl.push(HomePage)
         })
-        this.loginForm.reset()
+        // this.loginForm.reset()
     }
     goToSignup() {
         this.navCtrl.push(SignupPage)

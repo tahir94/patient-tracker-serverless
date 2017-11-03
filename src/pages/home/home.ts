@@ -14,6 +14,7 @@ import { GET_PATIENT } from "../../actions/patient";
 export class HomePage implements OnInit {
 	@select((s : AppState)=>s.auth.userData) userData$ : Observable<Object>;
 	@select((s : AppState)=>s.auth.errorMessage) errorMessage$ : Observable<string>;
+	@select((s : AppState)=>s.patient.patientData) patientData$ : Observable<Array<any>>;
 
   constructor(public navCtrl: NavController,
 			 private ngRedux : NgRedux<AppState>) {
@@ -25,6 +26,11 @@ export class HomePage implements OnInit {
 	
 		this.ngRedux.dispatch({
 			type : GET_PATIENT
+		})
+
+		this.patientData$.subscribe((data)=>{
+			console.log('patient data',data);
+			
 		})
 
 	  this.userData$.subscribe((data)=>{

@@ -3,12 +3,12 @@ import { GET_PATIENT_SUCCESS, DELETE, ADD_PATIENT, ADD_PATIENT_SUCCESS, LOCAL_DA
 
 
 export interface PatientState {
-	// patientData: any;
+	patientData: any;
 
 }
 
 export const PATIENT_INITIAL_STATE = {
-	// patientData: []
+	patientData: []
 
 }
 
@@ -19,7 +19,7 @@ export const PatientReducer = (state: PatientState = PATIENT_INITIAL_STATE, acti
 		console.log('reducer log ! ',action.payload);
 		
 		case GET_PATIENT_SUCCESS:
-			// return tassign({ patientData: action.payload })
+			return tassign({ patientData: action.payload })
 
 		case DELETE_SUCCESS:
 			// state.patientData.forEach((ele, i) => {

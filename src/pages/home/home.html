@@ -14,9 +14,9 @@
 		<button ion-button color="primary" round (click)="add()">Add Patient</button>
 	</div>
 
-	<div *ngIf="isPatientList">
+	<div *ngIf="patientData$ | async">
 		<ion-list>
-			<button style="color :#1B8BD7;font-size: 1.3em" class="list-button" ion-item *ngFor="let a of patientData; let i = index"
+			<button style="color :#1B8BD7;font-size: 1.3em" class="list-button" ion-item *ngFor="let a of patientData$ | async; let i = index"
 			 (click)="itemTapped(a,i)">
 						  {{a.patientName}}
 			</button>
