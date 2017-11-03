@@ -15,6 +15,7 @@ import { HomePage } from '../pages/home/home';
 import { PatientFormPage } from "../pages/patient-form/patient-form";
 import { LoginPage } from "../pages/login/login";
 import { SignupPage } from "../pages/signup/signup";
+import { PatientDetailsPage } from "../pages/patient-details/patient-details";
 
 // redux imports
 import { combineReducers } from 'redux'
@@ -39,7 +40,8 @@ export const firebaseConfig = {
 	HomePage,
 	PatientFormPage,
 	LoginPage,
-	SignupPage
+	SignupPage,
+	PatientDetailsPage
   ],
   imports: [
     BrowserModule,
@@ -56,7 +58,8 @@ export const firebaseConfig = {
 	HomePage,
 	PatientFormPage,
 	LoginPage,
-	SignupPage
+	SignupPage,
+	PatientDetailsPage
   ],
   providers: [
 	PatientEpic,

@@ -7,6 +7,8 @@ import { Observable } from "rxjs";
 
 import { GET_PATIENT } from "../../actions/patient";
 
+import { PatientDetailsPage } from "../patient-details/patient-details";
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -48,6 +50,17 @@ export class HomePage implements OnInit {
 add(){
 this.navCtrl.push(PatientFormPage)
 }
+
+itemTapped(item, index) {
+	 console.log(item);
+	 console.log(index);
+	 
+	 
+			this.navCtrl.push(PatientDetailsPage, {
+				item,
+				index
+			})
+		}
 
 
 
