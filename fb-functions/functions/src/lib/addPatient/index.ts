@@ -43,13 +43,17 @@ export const getPatientListener = functions.https.onRequest(async (req : Request
 export const fetchPatientsListener = functions.https.onRequest(async (req : Request,res : Response)=>{
 	cors(req,res, () => {
 		console.log('server fetch patients',req.query.patientUids);
-		PatientClass.fetchPatients(req.query.patientUids).then((success)=>{
-			console.log('fetch success',success);
+		PatientClass.fetchPatients(req.query.patientUids).then((success : any)=>{
+			console.log('fetch success3',success);
+			// success.forEach((element : any)=> {
+			// 	console.log('eleee',element);
+				
+			// });
 			res.send(success);	
-		}).catch((error=>{
+		}).catch((error : any)=>{
 			console.log('fetch error',error);
 			res.send(error)
 			
-		}))
+		})
 	})
 })

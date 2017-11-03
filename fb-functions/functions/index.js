@@ -223,12 +223,15 @@ exports.fetchPatientsListener = functions.https.onRequest((req, res) => __awaite
     cors(req, res, () => {
         console.log('server fetch patients', req.query.patientUids);
         patient_1.PatientClass.fetchPatients(req.query.patientUids).then((success) => {
-            console.log('fetch success', success);
+            console.log('fetch success3', success);
+            // success.forEach((element : any)=> {
+            // 	console.log('eleee',element);
+            // });
             res.send(success);
-        }).catch((error => {
+        }).catch((error) => {
             console.log('fetch error', error);
             res.send(error);
-        }));
+        });
     });
 }));
 
@@ -285,43 +288,36 @@ class PatientClass {
         });
     }
     static fetchPatients(patientUids) {
-        // console.log('db fetch!', patientUids);
         return new Promise((resolve, reject) => {
-            // docRef.get().then((doc)=>{
-            docRef.get().then((querySnapshot) => {
-                let pat1 = [];
-                querySnapshot.forEach((doc) => {
-                    // console.log(doc.id, " =>------ ", doc.data());
-                    // console.log('in forEach uids', patientUids);
-                    let fil = patientUids.split(',').map((abc) => {
-                        if (abc.toLowerCase() === doc.id.toLowerCase()) {
-                            console.log("doctadsad ", doc.data());
-                            return doc.data();
+            docRef.get().then(snapshot => {
+                console.log('snapshot', snapshot);
+                let arr1 = [];
+                let patArray = [];
+                patArray = patientUids.split(',');
+                snapshot.forEach((doc) => {
+                    // const patientIdArray = [patientUids];
+                    // patientUids.forEach((param : any)=>{
+                    // 	console.log('paramm!',param);
+                    // })
+                    console.log('[doc id]', doc.id);
+                    console.log('[pat arr]', patArray);
+                    patArray.forEach((param) => {
+                        console.log('param2', param);
+                        if (doc.id == param) {
+                            // let currentPatients : any = [];
+                            // currentPatients.push(doc.data())
+                            arr1.push(doc.data());
                         }
                     });
-                    if (fil.length) {
-                        pat1.push(...fil);
-                    }
-                    // if (doc.id == patientUids) {
-                    // 	console.log('if uids', doc.id, "=====", doc.data());
-                    // }
-                    console.warn(' ======----=======----------=== ', fil);
+                    // resolve(patArray)
+                    // console.log(doc.data());
                 });
-                console.log('#########################', pat1);
-                resolve(pat1);
-            }).catch((error) => {
-                console.log('error in fetch doc', error);
+                console.info('RESOLVE :::---::: ', arr1);
+                resolve(arr1);
+            }).catch(error => {
                 reject(error);
             });
-            // if(doc.docs){
-            // 	console.log('fetch doc data',doc.docs);
-            // 	resolve(doc.docs)					
-            // }
-            // else {
-            // 	console.log('nothing in fetch doc', doc.docs);					
-            // }
         });
-        // })
     }
 }
 exports.PatientClass = PatientClass;
