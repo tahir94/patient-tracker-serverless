@@ -64,7 +64,7 @@ export const editListener = functions.https.onRequest(async (req : Request, res 
 		
 		PatientClass.editListener(req.body).then((success)=>{
 			console.log('success edit server');
-			
+			res.send('success')
 		}).catch((error)=>{
 			console.log('error edit server');
 			

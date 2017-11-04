@@ -32,13 +32,36 @@ export class PatientDetailsPage {
                 this.selectedItem = navParams.get('item');
                 this.selectedIndex = navParams.get('ndex')
   }
+  isPatientEdit = false;
+//   isPatientEdit(index){
+// 	console.log(index);
+// 	if(index){
+// 		return true;
+// 	}
+//   }
+edit(){
+	this.isPatientEdit = true;
+}
+  editPatient(shwoItem,editItem,userId){
+	  console.log(shwoItem);
+	  
+let editObj = {
+	editItem : editItem,
+	userId : userId
+}
+console.log(editObj);
 
-  editPatient(editItem){
 
 	this.ngredux.dispatch({
 		type : EDIT,
-		payload : editItem
+		payload : editObj
 	})
+  }
+
+  showItem(patientData){
+	  console.log(patientData);
+	  
+	 this.isPatientEdit = false; 
   }
 
   ionViewDidLoad() {

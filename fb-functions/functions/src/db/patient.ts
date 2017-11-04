@@ -97,8 +97,11 @@ export class PatientClass {
 	}
 
 	static editListener(editData : any){
+		console.log('qwert',editData);
+		
 		return new Promise((resolve,reject)=>{
-			resolve('success edit db')
+			// docRef.doc(editData.userId).update(editData.editItem)
+			// resolve('success edit db')
 		})
 		// .catch((error)=>{
 		// 	reject('error edit db')

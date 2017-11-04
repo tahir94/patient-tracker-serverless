@@ -242,6 +242,7 @@ exports.editListener = functions.https.onRequest((req, res) => __awaiter(this, v
         console.log('server edit', req.body);
         patient_1.PatientClass.editListener(req.body).then((success) => {
             console.log('success edit server');
+            res.send('success');
         }).catch((error) => {
             console.log('error edit server');
         });
@@ -333,8 +334,10 @@ class PatientClass {
         });
     }
     static editListener(editData) {
+        console.log('qwert', editData);
         return new Promise((resolve, reject) => {
-            resolve('success edit db');
+            // docRef.doc(editData.userId).update(editData.editItem)
+            // resolve('success edit db')
         });
         // .catch((error)=>{
         // 	reject('error edit db')
