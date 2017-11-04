@@ -42,8 +42,15 @@ export class PatientDetailsPage {
 edit(){
 	this.isPatientEdit = true;
 }
-  editPatient(shwoItem,editItem,userId){
-	  console.log(shwoItem);
+patientData = {
+	patientName : '',
+	patientAge : '',
+	patientAddress : '',
+	gender : ''
+};
+
+  editPatient(editItem,userId){
+	  console.log(this.patientData);
 	  
 let editObj = {
 	editItem : editItem,

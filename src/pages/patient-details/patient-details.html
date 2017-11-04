@@ -28,7 +28,7 @@
 			<ion-icon name="md-arrow-back"></ion-icon>
 			
 		  </button>
-		  <button style="background:#00BCD4;color: white"  (click)="editPatient(patientData,selectedItem.patientName,selectedItem.userId)">Edit Done</button>
+		  <button style="background:#00BCD4;color: white"  (click)="editPatient(selectedItem.patientName,selectedItem.userId)">Edit Done</button>
 	  </ion-item-options>
 
       <ion-item-options *ngIf="!isPatientEdit">
@@ -46,8 +46,7 @@
           Patient Age <span style="float :right">{{selectedItem.patientAge}}</span>
         </ion-item>
         <ion-item-options>
-            <button style="background:#00BCD4;color: white" (click)="editPatient(selectedItem.patientAge,selectedItem.userId)">EDIT</button>
-            
+            <button style="background:#00BCD4;color: white" (click)="editPatient(selectedItem.patientAge,selectedItem.userId)">EDIT</button>           
           </ion-item-options>
       </ion-item-sliding>
     </ion-list>
