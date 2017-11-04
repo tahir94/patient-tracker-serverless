@@ -32,15 +32,28 @@ export class PatientDetailsPage {
                 this.selectedItem = navParams.get('item');
                 this.selectedIndex = navParams.get('ndex')
   }
-  isPatientEdit = false;
-//   isPatientEdit(index){
-// 	console.log(index);
-// 	if(index){
-// 		return true;
-// 	}
-//   }
-edit(){
-	this.isPatientEdit = true;
+  isPatientEdit2 = true;
+  isPatientEdit(index){
+
+	console.log(index);
+	if(index == '2.2'){
+		return false;
+	}
+	if(index){
+		this.isPatientEdit2 = false;
+		
+		return true;
+	}
+	// else if(!index){
+	// 	return false;
+	// }
+	return true;
+  }
+edit(index){
+	console.log(index);
+	
+	// this.isPatientEdit = true;
+	this.isPatientEdit(index)
 }
 patientData = {
 	patientName : '',
@@ -68,7 +81,7 @@ console.log(editObj);
   showItem(patientData){
 	  console.log(patientData);
 	  
-	 this.isPatientEdit = false; 
+	//  this.isPatientEdit = false; 
   }
 
   ionViewDidLoad() {

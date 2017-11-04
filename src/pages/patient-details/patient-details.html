@@ -1,30 +1,29 @@
-
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>patient-details</ion-title>
-  </ion-navbar>
+	<ion-navbar>
+		<ion-title>patient-details</ion-title>
+	</ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <ion-list>
+	<!-- <ion-list>
     <ion-item-sliding #item>
       <ion-item *ngIf="!isPatientEdit" style="color :#1B8BD7;font-size: 1.2em;">
         Patient Name <span style="float :right">{{selectedItem.patientName}}</span>
 	  </ion-item>
 
 	  <ion-item *ngIf="isPatientEdit">
-		<ion-label id="label">
-			<!-- <ion-icon name="md-mail"></ion-icon> -->
-		</ion-label>
+		<ion-label id="label"> -->
+	<!-- <ion-icon name="md-mail"></ion-icon> -->
+	<!-- </ion-label>
 		<ion-input [(ngModel)]="patientData.patientName" color="danger" placeholder="edit patient"></ion-input>
 	</ion-item>
 
-	<ion-item-options side="left" *ngIf="isPatientEdit">
-		<!-- <button style="background:#00BCD4;color: white" (click)="editPatient(selectedItem.patientName,selectedItem.userId)">EDIT</button> -->
-		<button (click)="showItem()" style="background:#00BCD4" ion-button icon-left>
+	<ion-item-options side="left" *ngIf="isPatientEdit"> -->
+	<!-- <button style="background:#00BCD4;color: white" (click)="editPatient(selectedItem.patientName,selectedItem.userId)">EDIT</button> -->
+	<!-- <button (click)="showItem()" style="background:#00BCD4" ion-button icon-left>
 			<ion-icon name="md-arrow-back"></ion-icon>
 			
 		  </button>
@@ -36,45 +35,84 @@
          
         </ion-item-options>
     </ion-item-sliding>
-  </ion-list>
+  </ion-list> -->
 
-  
-  
-  <ion-list>
-      <ion-item-sliding  #item>
-        <ion-item style="color :#1B8BD7;font-size: 1.2em;">
-          Patient Age <span style="float :right">{{selectedItem.patientAge}}</span>
-        </ion-item>
-        <ion-item-options>
-            <button style="background:#00BCD4;color: white" (click)="editPatient(selectedItem.patientAge,selectedItem.userId)">EDIT</button>           
-          </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
+	<div>
+		<ion-list>
+			<ion-item *ngIf="!isPatientEdit" style="color :#1B8BD7;font-size: 1.2em;">
+				Patient Name <span style="float :right">{{selectedItem.patientName}}</span>
+			</ion-item>
 
-  <ion-list>
-      <ion-item-sliding #item>
-        <ion-item style="color :#1B8BD7;font-size: 1.2em;">
-          Patient Address <span style="float :right">{{selectedItem.patientAddress}}</span>
-        </ion-item>
-        <ion-item-options>
-            <button style="background:#00BCD4;color: white" (click)="editPatient(selectedItem.patientAddress,selectedItem.userId)">EDIT</button>
-          </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
+			<ion-item style="color :#1B8BD7;font-size: 1.2em;">
+				Patient Age <span style="float :right">{{selectedItem.patientAge}}</span>
+			</ion-item>
+
+			<ion-item style="color :#1B8BD7;font-size: 1.2em;">
+				Patient Address <span style="float :right">{{selectedItem.patientAddress}}</span>
+			</ion-item>
+
+			<ion-item style="color :#1B8BD7;font-size: 1.2em;">
+				Patient Gender <span style="float :right">{{selectedItem.gender}}</span>
+			</ion-item>
+		</ion-list>
+	</div>
 
 
-  <ion-list>
-      <ion-item-sliding #item>
-        <ion-item style="color :#1B8BD7;font-size: 1.2em;">
-          Patient Gender <span style="float :right">{{selectedItem.gender}}</span>
-        </ion-item>
-        <ion-item-options>
-            <button style="background:#00BCD4;color: white" (click)="editPatient(selectedItem.gender,selectedItem.userId)">EDIT</button>
-          </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
+	<div *ngIf="isEdit">
+		<ion-list>
+			<ion-item-sliding #item>
+				<ion-item style="color :#1B8BD7;font-size: 1.2em;">
+					Patient Age <span style="float :right">{{selectedItem.patientAge}}</span>
+				</ion-item>
 
-  <div style="text-align : center;margin-top: 100px;">
-    <button ion-button color="danger" (click)="deletePatient(selectedItem)">Delete</button>
-  </div>
+				<ion-item-options *ngIf="isPatientEdit2">
+					<button style="background:#00BCD4;color: white" (click)="edit('2')">EDIT</button>
+				</ion-item-options>
+
+				<ion-item *ngIf="isPatientEdit('2.2')">
+					<ion-label id="label">
+						<!-- <ion-icon name="md-mail"></ion-icon> -->
+					</ion-label>
+					<ion-input [(ngModel)]="patientData.patientAge" color="danger" placeholder="edit patient age"></ion-input>
+				</ion-item>
+
+				<ion-item-options side="left" *ngIf="isPatientEdit">
+					<!-- <button style="background:#00BCD4;color: white" (click)="editPatient(selectedItem.patientName,selectedItem.userId)">EDIT</button> -->
+					<button (click)="showItem()" style="background:#00BCD4" ion-button icon-left>
+				<ion-icon name="md-arrow-back"></ion-icon>				
+			  </button>
+					<button style="background:#00BCD4;color: white" (click)="editPatient(selectedItem.patientName,selectedItem.userId)">Edit Done</button>
+				</ion-item-options>
+
+
+			</ion-item-sliding>
+
+		</ion-list>
+
+		<ion-list>
+			<ion-item-sliding #item>
+				<ion-item style="color :#1B8BD7;font-size: 1.2em;">
+					Patient Address <span style="float :right">{{selectedItem.patientAddress}}</span>
+				</ion-item>
+				<ion-item-options>
+					<button style="background:#00BCD4;color: white" (click)="editPatient(selectedItem.patientAddress,selectedItem.userId)">EDIT</button>
+				</ion-item-options>
+			</ion-item-sliding>
+		</ion-list>
+
+
+		<ion-list>
+			<ion-item-sliding #item>
+				<ion-item style="color :#1B8BD7;font-size: 1.2em;">
+					Patient Gender <span style="float :right">{{selectedItem.gender}}</span>
+				</ion-item>
+				<ion-item-options>
+					<button style="background:#00BCD4;color: white" (click)="editPatient(selectedItem.gender,selectedItem.userId)">EDIT</button>
+				</ion-item-options>
+			</ion-item-sliding>
+		</ion-list>
+	</div>
+	<div style="text-align : center;margin-top: 100px;">
+		<button ion-button color="danger" (click)="deletePatient(selectedItem)">Delete</button>
+	</div>
 </ion-content>
