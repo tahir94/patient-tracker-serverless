@@ -12,6 +12,7 @@ export const LOCAL_DATA_SUCCESS =  'LOCAL_DATA_SUCCESS';
 export const DELETE =  'DELETE' ;
 export const DELETE_SUCCESS =  'DELETE_SUCCESS' ;
 
+export const DOC_PATIENT_UIDS_SUCCESS =  'DOC_PATIENT_UIDS_SUCCESS' ;
 export const EDIT =  'EDIT' ;
 export const EDIT_SUCCESS =  'EDIT_SUCCESS' ;
 

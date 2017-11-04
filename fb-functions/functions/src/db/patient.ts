@@ -20,7 +20,7 @@ export class PatientClass {
 				patientName: getData.patientName,
 				patientAge: getData.patientAge,
 				patientAddress: getData.patientAddress,
-				gender: getData.gender
+				gender: getData.gender,
 			}).then((success) => {
 				console.log('Status Saved!');
 				resolve({ 'push_id': success.id, 'user_id': getData.userId })

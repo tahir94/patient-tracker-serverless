@@ -17,6 +17,7 @@ export class HomePage implements OnInit {
 	@select((s : AppState)=>s.auth.userData) userData$ : Observable<Object>;
 	@select((s : AppState)=>s.auth.errorMessage) errorMessage$ : Observable<string>;
 	@select((s : AppState)=>s.patient.patientData) patientData$ : Observable<Array<any>>;
+	@select((s : AppState)=>s.patient.patientUids) patientUids$ : Observable<Array<any>>;
 
   constructor(public navCtrl: NavController,
 			 private ngRedux : NgRedux<AppState>) {
@@ -29,7 +30,10 @@ export class HomePage implements OnInit {
 		this.ngRedux.dispatch({
 			type : GET_PATIENT
 		})
-
+		this.patientUids$.subscribe((data)=>{
+			console.log(data);
+			
+		})
 		this.patientData$.subscribe((data)=>{
 			console.log('patient data',data);
 			

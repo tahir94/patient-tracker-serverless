@@ -8,7 +8,8 @@ import { AppState } from '../reducers/rootReducer';
 import {
 	ADD_PATIENT, ADD_PATIENT_SUCCESS, DELETE,
 	DELETE_SUCCESS, GET_PATIENT, GET_PATIENT_SUCCESS,
-	SET_DATA_LOCALLLY, LOCAL_DATA_SUCCESS,EDIT,EDIT_SUCCESS
+	SET_DATA_LOCALLLY, LOCAL_DATA_SUCCESS,EDIT,EDIT_SUCCESS,
+	DOC_PATIENT_UIDS_SUCCESS
 } from "../actions/patient";
 
 import { AngularFireAuth } from "angularfire2/auth";
@@ -61,6 +62,7 @@ export class PatientEpic {
 						console.log(res.json());
 						let patientUids = Object.keys(res.json())
 						console.log(patientUids);
+
 					return	this.http.get('http://localhost:5000/patient-tracker-b35bc/us-central1/fetchPatients/?patientUids=' + patientUids)
 							.switchMap((res => {
 
@@ -77,9 +79,10 @@ export class PatientEpic {
 		.switchMap(({payload})=>{
 			let headers = new Headers;
 			headers.append('Content-Type','application/json');
-
+			console.log('edit epic',payload);
+			
 			let currentUserUid = this.afAuth.auth.currentUser.uid;
-			this.http.post('',payload)
+			this.http.post('http://localhost:5000/patient-tracker-b35bc/us-central1/editPatient',payload)
 			.subscribe(res => {
 				console.log(res);
 				

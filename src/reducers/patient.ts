@@ -1,14 +1,15 @@
 import { tassign } from 'tassign';
-import { GET_PATIENT_SUCCESS, DELETE, ADD_PATIENT, ADD_PATIENT_SUCCESS, LOCAL_DATA_SUCCESS, DELETE_SUCCESS } from '../actions/patient';
+import { GET_PATIENT_SUCCESS, DELETE, ADD_PATIENT, ADD_PATIENT_SUCCESS, LOCAL_DATA_SUCCESS, DELETE_SUCCESS,DOC_PATIENT_UIDS_SUCCESS } from '../actions/patient';
 
 
 export interface PatientState {
 	patientData: any;
-
+	patientUids : any;
 }
 
 export const PATIENT_INITIAL_STATE = {
-	patientData: []
+	patientData: [],
+	patientUids : []
 
 }
 
@@ -18,6 +19,9 @@ export const PatientReducer = (state: PatientState = PATIENT_INITIAL_STATE, acti
 		case ADD_PATIENT_SUCCESS:
 		console.log('reducer log ! ',action.payload);
 		
+		case DOC_PATIENT_UIDS_SUCCESS:
+		return tassign({patientUids : action.payload})
+
 		case GET_PATIENT_SUCCESS:
 			return tassign({ patientData: action.payload })
 
