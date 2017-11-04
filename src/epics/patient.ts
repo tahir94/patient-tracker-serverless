@@ -8,7 +8,7 @@ import { AppState } from '../reducers/rootReducer';
 import {
 	ADD_PATIENT, ADD_PATIENT_SUCCESS, DELETE,
 	DELETE_SUCCESS, GET_PATIENT, GET_PATIENT_SUCCESS,
-	SET_DATA_LOCALLLY, LOCAL_DATA_SUCCESS
+	SET_DATA_LOCALLLY, LOCAL_DATA_SUCCESS,EDIT,EDIT_SUCCESS
 } from "../actions/patient";
 
 import { AngularFireAuth } from "angularfire2/auth";
@@ -70,5 +70,21 @@ export class PatientEpic {
 							}))
 					}))
 			})
+	}
+
+	EditPatient = (actions$ :ActionsObservable<any>)=>{
+		return actions$.ofType(EDIT)
+		.switchMap(({payload})=>{
+			let headers = new Headers;
+			headers.append('Content-Type','application/json');
+
+			let currentUserUid = this.afAuth.auth.currentUser.uid;
+			this.http.post('',payload)
+			.subscribe(res => {
+				console.log(res);
+				
+			})
+			return Observable.of()
+		})
 	}
 }

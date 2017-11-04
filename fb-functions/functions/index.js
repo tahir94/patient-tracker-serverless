@@ -162,6 +162,7 @@ const auth_1 = __webpack_require__(7);
 exports.addPatient = addPatient_1.listener;
 exports.getPatients = addPatient_1.getPatientListener;
 exports.fetchPatients = addPatient_1.fetchPatientsListener;
+exports.editPatient = addPatient_1.editListener;
 exports.signup = auth_1.signupListener;
 exports.login = auth_1.loginListener;
 exports.checkUser = auth_1.checkUserListener;
@@ -231,6 +232,16 @@ exports.fetchPatientsListener = functions.https.onRequest((req, res) => __awaite
         }).catch((error) => {
             console.log('fetch error', error);
             res.send(error);
+        });
+    });
+}));
+exports.editListener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
+    cors(req, res, () => {
+        console.log('server edit', req.body);
+        patient_1.PatientClass.editListener(req.body).then((success) => {
+            console.log('success edit server');
+        }).catch((error) => {
+            console.log('error edit server');
         });
     });
 }));
@@ -318,6 +329,14 @@ class PatientClass {
                 reject(error);
             });
         });
+    }
+    static editListener(editData) {
+        return new Promise((resolve, reject) => {
+            resolve('success edit db');
+        });
+        // .catch((error)=>{
+        // 	reject('error edit db')
+        // })
     }
 }
 exports.PatientClass = PatientClass;

@@ -96,6 +96,15 @@ export class PatientClass {
 		})
 	}
 
+	static editListener(editData : any){
+		return new Promise((resolve,reject)=>{
+			resolve('success edit db')
+		})
+		// .catch((error)=>{
+		// 	reject('error edit db')
+		// })
+	}
+
 	// 	static fetchPatients(patientUids: any) {
 
 	// 		// ********************************

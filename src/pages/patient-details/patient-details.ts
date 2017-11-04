@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { PatientEpic } from '../../epics/patient';
 import { NgRedux, select } from "ng2-redux";
 import { AppState } from "../../reducers/rootReducer";
-import { DELETE } from "../../actions/patient";
+import { DELETE,EDIT } from "../../actions/patient";
 import { Http, Headers } from "@angular/http";
 import { Observable } from "rxjs";
 
@@ -31,6 +31,14 @@ export class PatientDetailsPage {
                 
                 this.selectedItem = navParams.get('item');
                 this.selectedIndex = navParams.get('ndex')
+  }
+
+  editPatient(editItem){
+
+	this.ngredux.dispatch({
+		type : EDIT,
+		payload : editItem
+	})
   }
 
   ionViewDidLoad() {

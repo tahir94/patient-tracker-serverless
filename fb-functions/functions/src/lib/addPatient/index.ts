@@ -57,3 +57,17 @@ export const fetchPatientsListener = functions.https.onRequest(async (req : Requ
 		})
 	})
 })
+
+export const editListener = functions.https.onRequest(async (req : Request, res :Response)=>{
+	cors(req,res, ()=>{
+		console.log('server edit',req.body);
+		
+		PatientClass.editListener(req.body).then((success)=>{
+			console.log('success edit server');
+			
+		}).catch((error)=>{
+			console.log('error edit server');
+			
+		})
+	})
+})

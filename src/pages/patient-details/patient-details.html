@@ -15,7 +15,7 @@
         Patient Name <span style="float :right">{{selectedItem.patientName}}</span>
       </ion-item>
       <ion-item-options>
-          <button style="background:#00BCD4;color: white">EDIT</button>
+          <button style="background:#00BCD4;color: white" (click)="editPatient(selectedItem.patientName)">EDIT</button>
          
         </ion-item-options>
     </ion-item-sliding>
@@ -29,7 +29,7 @@
           Patient Age <span style="float :right">{{selectedItem.patientAge}}</span>
         </ion-item>
         <ion-item-options>
-            <button style="background:#00BCD4;color: white">EDIT</button>
+            <button style="background:#00BCD4;color: white" (click)="editPatient(selectedItem.patientAge)">EDIT</button>
             
           </ion-item-options>
       </ion-item-sliding>
@@ -41,7 +41,7 @@
           Patient Address <span style="float :right">{{selectedItem.patientAddress}}</span>
         </ion-item>
         <ion-item-options>
-            <button style="background:#00BCD4;color: white">EDIT</button>
+            <button style="background:#00BCD4;color: white" (click)="editPatient(selectedItem.patientAddress)">EDIT</button>
           </ion-item-options>
       </ion-item-sliding>
     </ion-list>
@@ -53,7 +53,7 @@
           Patient Gender <span style="float :right">{{selectedItem.gender}}</span>
         </ion-item>
         <ion-item-options>
-            <button style="background:#00BCD4;color: white">EDIT</button>
+            <button style="background:#00BCD4;color: white" (click)="editPatient(selectedItem.gender)">EDIT</button>
           </ion-item-options>
       </ion-item-sliding>
     </ion-list>
