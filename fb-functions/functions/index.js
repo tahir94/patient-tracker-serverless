@@ -337,7 +337,7 @@ class PatientClass {
         console.log('qwert', editData);
         return new Promise((resolve, reject) => {
             // docRef.doc(editData.userId).update(editData.editItem)
-            // resolve('success edit db')
+            resolve('success edit db');
         });
         // .catch((error)=>{
         // 	reject('error edit db')

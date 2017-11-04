@@ -17,13 +17,15 @@ import { Observable } from "rxjs";
 
 @IonicPage()
 @Component({
-  selector: 'page-patient-details',
-  templateUrl: 'patient-details.html',
+	selector: 'page-patient-details',
+	templateUrl: 'patient-details.html',
 })
 export class PatientDetailsPage {
-  selectedItem: any;
+	selectedItem: any;
 	selectedIndex: number;
-
+	isEdit = false;
+	isEditDetails = true;
+	
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private fb: FormBuilder,
 		          private http: Http,
@@ -32,58 +34,65 @@ export class PatientDetailsPage {
                 this.selectedItem = navParams.get('item');
                 this.selectedIndex = navParams.get('ndex')
   }
-  isPatientEdit2 = true;
-  isPatientEdit(index){
+//   isPatientEdit2 = true;
+//   isPatientEdit(index){
 
-	console.log(index);
-	if(index == '2.2'){
-		return false;
-	}
-	if(index){
-		this.isPatientEdit2 = false;
+// 	console.log(index);
+// 	if(index == '2.2'){
+// 		return false;
+// 	}
+// 	if(index){
+// 		this.isPatientEdit2 = false;
 		
-		return true;
-	}
-	// else if(!index){
-	// 	return false;
-	// }
-	return true;
-  }
-edit(index){
-	console.log(index);
+// 		return true;
+// 	}
+// 	// else if(!index){
+// 	// 	return false;
+// 	// }
+// 	return true;
+//   }
+// edit(index){
+// 	console.log(index);
 	
-	// this.isPatientEdit = true;
-	this.isPatientEdit(index)
-}
-patientData = {
-	patientName : '',
-	patientAge : '',
-	patientAddress : '',
-	gender : ''
-};
+// 	// this.isPatientEdit = true;
+// 	this.isPatientEdit(index)
+// }
+// patientData = {
+// 	patientName : '',
+// 	patientAge : '',
+// 	patientAddress : '',
+// 	gender : ''
+// };
 
-  editPatient(editItem,userId){
-	  console.log(this.patientData);
+  editPatient(userId,editItem,index){
+	  console.log(this.selectedItem);
 	  
 let editObj = {
+
 	editItem : editItem,
 	userId : userId
 }
+// this.ngredux.dispatch({
+// 	type : EDIT,
+// 	payload : editObj
+// })
+
+this.isEditDetails = true;
+this.isEdit = false;
 console.log(editObj);
 
 
-	this.ngredux.dispatch({
-		type : EDIT,
-		payload : editObj
-	})
+
   }
 
   showItem(patientData){
-	  console.log(patientData);
-	  
-	//  this.isPatientEdit = false; 
+	 this.isEdit = false;
+	 this.isEditDetails = true;
   }
-
+  edit(selectedItem){
+	  this.isEdit = true;
+	  this.isEditDetails = false;	  
+  }
   ionViewDidLoad() {
     console.log('ionViewDidLoad PatientDetailsPage');
   }
