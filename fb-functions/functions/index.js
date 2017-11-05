@@ -337,11 +337,26 @@ class PatientClass {
     static editListener(editData) {
         console.log('qwert', editData);
         return new Promise((resolve, reject) => {
-            docRef.doc(editData.userId).update({ patientName: editData.patientName }).then(success => {
-                resolve(success);
-            }).catch(error => {
-                reject(error);
-            });
+            switch (editData) {
+                case editData.patientName:
+                    docRef.doc(editData.userId).update({ patientName: editData.patientName }).then(success => {
+                        resolve(success);
+                    }).catch(error => {
+                        reject(error);
+                    });
+                case editData.patientAge:
+                    docRef.doc(editData.userId).update({ patientName: editData.patientName }).then(success => {
+                    }).catch((error) => {
+                    });
+                case editData.patientAddress:
+                    docRef.doc(editData.userId).update({ patientName: editData.patientName }).then(success => {
+                    }).catch((error) => {
+                    });
+                case editData.patientAgeL:
+                    docRef.doc(editData.userId).update({ patientName: editData.patientName }).then(success => {
+                    }).catch((error) => {
+                    });
+            }
         });
         // .catch((error)=>{
         // 	reject('error edit db')
