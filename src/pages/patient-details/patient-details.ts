@@ -57,21 +57,32 @@ export class PatientDetailsPage {
 // 	// this.isPatientEdit = true;
 // 	this.isPatientEdit(index)
 // }
-// patientData = {
-// 	patientName : '',
+patientData = {
+	patientName : '',
 // 	patientAge : '',
 // 	patientAddress : '',
 // 	gender : ''
-// };
+};
 
   editPatient(userId,editItem,index){
-	  console.log(this.selectedItem);
+	  if(index == '1'){
+		  let editObj = {
+		  
+			  patientName : editItem,
+			  userId : userId
+		  }
+		  this.ngredux.dispatch({
+			  type : EDIT,
+			  payload : editObj
+		  })
+		  
+	  }
+	  console.log(userId);
+	  console.log(editItem);
+	  console.log(index);
 	  
-let editObj = {
-
-	editItem : editItem,
-	userId : userId
-}
+	  
+	  this.patientData
 // this.ngredux.dispatch({
 // 	type : EDIT,
 // 	payload : editObj
@@ -79,7 +90,7 @@ let editObj = {
 
 this.isEditDetails = true;
 this.isEdit = false;
-console.log(editObj);
+// console.log(editObj);
 
 
 

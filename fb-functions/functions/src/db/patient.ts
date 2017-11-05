@@ -100,8 +100,12 @@ export class PatientClass {
 		console.log('qwert',editData);
 		
 		return new Promise((resolve,reject)=>{
-			// docRef.doc(editData.userId).update(editData.editItem)
-			resolve('success edit db')
+			docRef.doc(editData.userId).update({patientName : editData.patientName}).then(success => {
+				
+				resolve(success)
+			}).catch(error => {
+				reject(error)
+			})
 		})
 		// .catch((error)=>{
 		// 	reject('error edit db')

@@ -66,7 +66,7 @@
 					<ion-label>
 						<ion-icon name="md-create"></ion-icon>
 					</ion-label>
-					<ion-input #patientName color="danger" placeholder="patient name {{selectedItem.patientName}}"></ion-input>
+					<ion-input [(ngModel)]="selectedItem.patientName"  #patientName color="danger" placeholder="patient name {{selectedItem.patientName}}"></ion-input>
 				</ion-item>
 
 				<ion-item-options side="left">
@@ -89,7 +89,7 @@
 					<ion-label>
 						<ion-icon name="md-create"></ion-icon>
 					</ion-label>
-					<ion-input #patientAge color="danger" placeholder="patient age {{selectedItem.patientAge}}"></ion-input>
+					<ion-input  #patientAge color="danger" placeholder="patient age {{selectedItem.patientAge}}"></ion-input>
 				</ion-item>
 
 				<ion-item-options side="left">
