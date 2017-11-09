@@ -26,6 +26,12 @@ export class PatientDetailsPage {
 	isEdit = false;
 	isEditDetails = true;
 	
+
+	genders = [
+		{ value: 'male', viewValue: 'Male' },
+		{ value: 'female', viewValue: 'Female' }
+	];
+	
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private fb: FormBuilder,
 		          private http: Http,
@@ -59,40 +65,21 @@ export class PatientDetailsPage {
 // }
 patientData = {
 	patientName : '',
-// 	patientAge : '',
+	patientAge : '',
 // 	patientAddress : '',
 // 	gender : ''
 };
 
-  editPatient(userId,editItem,index){
-	  if(index == '1'){
-		  let editObj = {
-		  
-			  patientName : editItem,
-			  userId : userId
-		  }
-		  this.ngredux.dispatch({
-			  type : EDIT,
-			  payload : editObj
-		  })
-		  
-	  }
-	  console.log(userId);
-	  console.log(editItem);
-	  console.log(index);
-	  
-	  
-	  this.patientData
-// this.ngredux.dispatch({
-// 	type : EDIT,
-// 	payload : editObj
-// })
+  editPatient(){
+	  console.log(this.selectedItem);
+
+this.ngredux.dispatch({
+	type : EDIT,
+	payload : this.selectedItem
+})
 
 this.isEditDetails = true;
 this.isEdit = false;
-// console.log(editObj);
-
-
 
   }
 
@@ -100,7 +87,14 @@ this.isEdit = false;
 	 this.isEdit = false;
 	 this.isEditDetails = true;
   }
-  edit(selectedItem){
+  deletePatient(selectedItem){
+	this.ngredux.dispatch({
+		type : DELETE,
+		payload: selectedItem,
+		navCtrl: () => this.navCtrl.pop()
+	})
+  }
+  edit(){
 	  this.isEdit = true;
 	  this.isEditDetails = false;	  
   }

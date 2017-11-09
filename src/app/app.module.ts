@@ -79,6 +79,7 @@ export class AppModule {
 				createEpicMiddleware(this.patientEpic.Patient),
 				createEpicMiddleware(this.patientEpic.GetPatient),
 				createEpicMiddleware(this.patientEpic.EditPatient),
+				createEpicMiddleware(this.patientEpic.DeletePatient),
 				createEpicMiddleware(this.authEpic.Login),
 				createEpicMiddleware(this.authEpic.Signup),
 			]

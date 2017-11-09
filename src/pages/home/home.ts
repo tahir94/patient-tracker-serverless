@@ -4,6 +4,7 @@ import { PatientFormPage } from "../patient-form/patient-form";
 import { NgRedux,select } from "ng2-redux";
 import { AppState } from "../../reducers/rootReducer";
 import { Observable } from "rxjs";
+import {GET_REALTIME_UPDATE } from "../../actions/patient";
 
 import { GET_PATIENT } from "../../actions/patient";
 
@@ -17,6 +18,7 @@ export class HomePage implements OnInit {
 	@select((s : AppState)=>s.auth.userData) userData$ : Observable<Object>;
 	@select((s : AppState)=>s.auth.errorMessage) errorMessage$ : Observable<string>;
 	@select((s : AppState)=>s.patient.patientData) patientData$ : Observable<Array<any>>;
+	@select((s : AppState)=>s.patient.patientForm) patientForm$ : Observable<Array<any>>;
 	@select((s : AppState)=>s.patient.patientUids) patientUids$ : Observable<Array<any>>;
 
   constructor(public navCtrl: NavController,
@@ -25,8 +27,20 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit(){
+		this.patientForm$.subscribe((data)=>{
+			console.log(data);
+			
+			if(data){
+					this.ngRedux.dispatch({
+					type : GET_PATIENT
+				});
+				
+			}
+		})
 	console.log('HOME LOG!!');
-	
+		this.ngRedux.dispatch({
+			type: GET_REALTIME_UPDATE
+		})
 		this.ngRedux.dispatch({
 			type : GET_PATIENT
 		})
@@ -36,7 +50,6 @@ export class HomePage implements OnInit {
 		})
 		this.patientData$.subscribe((data)=>{
 			console.log('patient data',data);
-			
 		})
 
 	  this.userData$.subscribe((data)=>{

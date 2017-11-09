@@ -132,8 +132,15 @@ class AuthClass {
         return new Promise((resolve, reject) => {
             // userRef.doc(usersUids.user_id).update({patients : [{patientUids : usersUids.push_id,when: new Date()}]},{ merge: true })
             docRef.doc(usersUids.push_id).update({ userId: usersUids.push_id });
-            patientRef.doc(usersUids.user_id).update({ [usersUids.push_id]: true }).catch(a => {
-                patientRef.doc(usersUids.user_id).create({ [usersUids.push_id]: true });
+            patientRef.doc(usersUids.user_id).update({ [usersUids.push_id]: true })
+                .then(success => {
+                console.log('ON PAT SUCC: DB', success);
+                resolve(success);
+            })
+                .catch(a => {
+                patientRef.doc(usersUids.user_id).set({ [usersUids.push_id]: true });
+                console.log('ON PAT CATCH: DB', a);
+                reject(a);
             });
         });
     }
@@ -161,10 +168,13 @@ const admin = __webpack_require__(1);
 admin.initializeApp(functions.config().firebase);
 const addPatient_1 = __webpack_require__(5);
 const auth_1 = __webpack_require__(7);
+// export { signupListener,loginListener,checkUserListener }
 exports.addPatient = addPatient_1.listener;
 exports.getPatients = addPatient_1.getPatientListener;
 exports.fetchPatients = addPatient_1.fetchPatientsListener;
 exports.editPatient = addPatient_1.editListener;
+exports.deletePatient = addPatient_1.deleteListener;
+exports.realtimePatientChanges = addPatient_1.realtimePatientListener;
 exports.signup = auth_1.signupListener;
 exports.login = auth_1.loginListener;
 exports.checkUser = auth_1.checkUserListener;
@@ -200,14 +210,21 @@ const auth_1 = __webpack_require__(3);
 let cors = _cors({ origin: true });
 exports.listener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
     cors(req, res, () => {
-        console.log('check', req.body);
+        console.log('ADD PAT: SERVER', req.body);
         patient_1.PatientClass.addPatient(req.body).then((success) => {
-            console.log('patient success', success.user_id);
-            auth_1.AuthClass.OnPatientSuccess(success);
+            console.log('ADD PAT SUCC: SERVER ', success.user_id);
+            auth_1.AuthClass.OnPatientSuccess(success).then((succ) => {
+                console.log('SUCC ON PAT: SERVER ', succ);
+                res.send(succ);
+            }).catch(a => {
+                console.log('ERR ON PAT: SERVER ', a);
+                res.send(a);
+            });
+            // res.send(success)
         }).catch((err) => {
             console.log(err);
+            res.send(err);
         });
-        res.send('hello world');
     });
 }));
 exports.getPatientListener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -244,8 +261,44 @@ exports.editListener = functions.https.onRequest((req, res) => __awaiter(this, v
             console.log('success edit server', success);
             res.send(success);
         }).catch((error) => {
+            console.log('111111111111111111111', req.body);
             console.log('error edit server', error);
             res.send(error);
+        });
+    });
+}));
+exports.deleteListener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
+    cors(req, res, () => {
+        console.log('delete req', req.body);
+        patient_1.PatientClass.deletePatient(req.body).then(success => {
+            console.log(success);
+            res.send(success);
+            //  if(success){
+            // 	cors(req, res, () => {
+            // 		console.log('server get func !', req.query.uid);
+            // 		PatientClass.getPatient(req.query.uid).then((success) => {
+            // 			console.log('get server success', success);
+            // 			res.send(success);
+            // 		}).catch((error) => {
+            // 			console.log('get server error', error);
+            // 			res.send(error);
+            // 		})
+            // 	})
+            // 	//  res.redirect('/fetchPatients')
+            // 	//  PatientClass.realtimeChages(((a: any) => res.send(a)), req.body)
+            //  }
+        }).catch(error => {
+            console.log(error);
+            res.send(error);
+        });
+    });
+}));
+exports.realtimePatientListener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
+    cors(req, res, () => {
+        patient_1.PatientClass.realTimePatient().then(success => {
+            console.log('success server realtime', success);
+        }).catch(error => {
+            console.log('error server realtime', error);
         });
     });
 }));
@@ -262,17 +315,19 @@ const admin = __webpack_require__(1);
 const functions = __webpack_require__(0);
 const docRef = admin.firestore().collection("patients");
 const patientRef = admin.firestore().collection('doctorPatientsUids');
+const patientRef2 = admin.firestore().collection('doctorPatientsUids');
 class PatientClass {
+    //patientRef2: Angu
     static addPatient(getData) {
         return new Promise((resolve, reject) => {
-            console.log('GET dATA', getData);
+            console.log('ADD PAT: DB', getData);
             docRef.add({
                 patientName: getData.patientName,
                 patientAge: getData.patientAge,
                 patientAddress: getData.patientAddress,
                 gender: getData.gender,
             }).then((success) => {
-                console.log('Status Saved!');
+                console.log('PAT SUCCESS: DB');
                 resolve({ 'push_id': success.id, 'user_id': getData.userId });
             }).catch((error) => {
                 console.log('got an error');
@@ -288,8 +343,9 @@ class PatientClass {
                     console.log('document data', doc.data());
                     resolve(doc.data());
                 }
-                else {
+                else if (!doc.data()) {
                     console.log('no such document');
+                    reject('no such document');
                 }
             })).catch((error) => {
                 console.log('error document', error);
@@ -309,23 +365,15 @@ class PatientClass {
                 let arr1 = [];
                 let patArray = [];
                 patArray = patientUids.split(',');
-                snapshot.forEach((doc) => {
-                    // const patientIdArray = [patientUids];
-                    // patientUids.forEach((param : any)=>{
-                    // 	console.log('paramm!',param);
-                    // })
-                    console.log('[doc id]', doc.id);
+                snapshot.docChanges.forEach((doc) => {
+                    console.log('[doc id]', doc.doc.id);
                     console.log('[pat arr]', patArray);
                     patArray.forEach((param) => {
                         console.log('param2', param);
-                        if (doc.id == param) {
-                            // let currentPatients : any = [];
-                            // currentPatients.push(doc.data())
-                            arr1.push(doc.data());
+                        if (doc.doc.id == param) {
+                            arr1.push(doc.doc.data());
                         }
                     });
-                    // resolve(patArray)
-                    // console.log(doc.data());
                 });
                 console.info('RESOLVE :::---::: ', arr1);
                 resolve(arr1);
@@ -337,30 +385,120 @@ class PatientClass {
     static editListener(editData) {
         console.log('qwert', editData);
         return new Promise((resolve, reject) => {
-            switch (editData) {
-                case editData.patientName:
-                    docRef.doc(editData.userId).update({ patientName: editData.patientName }).then(success => {
-                        resolve(success);
-                    }).catch(error => {
-                        reject(error);
-                    });
-                case editData.patientAge:
-                    docRef.doc(editData.userId).update({ patientName: editData.patientName }).then(success => {
-                    }).catch((error) => {
-                    });
-                case editData.patientAddress:
-                    docRef.doc(editData.userId).update({ patientName: editData.patientName }).then(success => {
-                    }).catch((error) => {
-                    });
-                case editData.patientAgeL:
-                    docRef.doc(editData.userId).update({ patientName: editData.patientName }).then(success => {
-                    }).catch((error) => {
-                    });
-            }
+            admin.firestore()
+                .collection("patients")
+                .doc(editData.userId)
+                .update(editData)
+                .then(res => {
+                resolve(res);
+            })
+                .catch(e => {
+                reject(e);
+            });
+            // if (editData.hasOwnProperty('patientName')) {
+            // 	console.log('ccc');
+            // 	console.log('hasOwnProp', editData.hasOwnProperty('patientName'));
+            // 	docRef.doc(editData.userId).update({ patientName: editData.patientName }).then(success => {	
+            // 		resolve(success)
+            // 	}).catch(error => {
+            // 		reject(error)
+            // 	});
+            // }
+            // else {
+            // 	console.log('hasOwnProp', editData);
+            // 	docRef.doc(editData.userId).update({ patientAge: editData.patientAge }).then(success => {
+            // 		resolve(success)
+            // 	}).catch(error => {
+            // 		reject(error)
+            // 	})
+            // }
+            // else if (editData.hasOwnProperty('patientAddress')) {
+            // 	docRef.doc(editData.userId).update({ patientName: editData.patientAddress }).then(success => {
+            // 		resolve(success)
+            // 	}).catch(error => {
+            // 		reject(error)
+            // 	})
+            // }
+            // else {
+            // 	docRef.doc(editData.userId).update({ patientName: editData.gender }).then(success => {
+            // 		resolve(success)
+            // 	}).catch(error => {
+            // 		reject(error)
+            // 	})
+            // }
         });
         // .catch((error)=>{
         // 	reject('error edit db')
         // })
+    }
+    static deletePatient(deleteData) {
+        return new Promise((resolve, reject) => {
+            patientRef.doc(deleteData.currentUserId).get().then(doc => {
+                // ******************************			
+                for (let abc in doc.data()) {
+                    console.log('abcc', abc);
+                    if (abc == deleteData.userId) {
+                        patientRef2.doc(deleteData.currentUserId).update(abc, false);
+                    }
+                }
+                // ******************************
+                //////////////////////////////// 
+                // Object.keys(doc.data()).forEach((key,index)=>{
+                // 		console.log('KEYY',key.valueOf());
+                // 		console.log('INDEX',index);
+                // 		if(key == deleteData.userId){
+                // 			let ref = 'doctorPatientsUids/'+deleteData.userId;
+                // 			const patientRef2 = admin.firestore().doc(ref);
+                // 			patientRef2.update(true);
+                // 			console.log('current uid',deleteData.currentUserId);
+                // 			//patientRef2.
+                // 			// delete key
+                // 			// delete deleteData.userId;
+                // 			// deleteData.remove();
+                // 			// patientRef2.doc.
+                // 		}
+                // 	})
+                //////////////////////////////// 
+                // for(let abc in doc.data()){
+                // console.log('abcc',doc.data()[abc]);
+                // if(doc.data()[abc].hasOwnProperty(abc)){
+                // 	console.log('abcc',abc);
+                // }
+                // console.log(abc[doc.data()]);
+                // }
+            });
+            // docRef.doc(deleteData.userId).get().then(success=>{
+            // 	console.log('delete succ!!',success);
+            // 	resolve(success);
+            // }).catch(error=>{
+            // 	 console.log('del err!',error);
+            // 	 reject(error)
+            // })
+            docRef.doc(deleteData.userId).delete()
+                .then(success => {
+                patientRef.doc(deleteData.currentUserId);
+                console.log('delete success', success);
+                resolve(success);
+            }).catch(error => {
+                console.log('delete error', error);
+                reject(error);
+            });
+        });
+    }
+    static realTimePatient() {
+        return new Promise((resolve, reject) => {
+            docRef.doc()
+                .onSnapshot((doc) => {
+                console.log("Current data: ", doc && doc.data());
+            });
+        }).then(success => {
+            console.log('success realtime', success);
+        }).catch(error => {
+            console.log('error on realtime');
+        });
+        //  .catch(error =>{
+        // 	 return reject()
+        //  })
     }
 }
 exports.PatientClass = PatientClass;

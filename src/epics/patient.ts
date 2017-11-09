@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActionsObservable } from 'redux-observable';
-import { Http, Headers } from '@angular/http';
+import { Http, Headers,RequestOptions,RequestOptionsArgs,RequestMethod } from '@angular/http';
 
 import { NgRedux, select } from "ng2-redux";
 import { AppState } from '../reducers/rootReducer';
@@ -31,7 +31,7 @@ export class PatientEpic {
 	}
 	Patient = (actions$: ActionsObservable<any>) => {
 		return actions$.ofType(ADD_PATIENT)
-			.switchMap(({ payload }) => {
+			.switchMap(({ payload,navCtrl }) => {
 				console.log('patient epic', payload);
 				let headers = new Headers();
 
@@ -41,7 +41,7 @@ export class PatientEpic {
 				this.http.post(url, payload, { headers: headers })
 					.subscribe((res) => {
 						console.log(res);
-
+						// navCtrl();
 					})
 				return Observable.of({ type: ADD_PATIENT_SUCCESS, payload: payload });
 			})
@@ -59,6 +59,8 @@ export class PatientEpic {
 
 			return	this.http.get('http://localhost:5000/patient-tracker-b35bc/us-central1/getPatients/?uid=' + currentUserUid)
 					.switchMap((res => {
+						
+						console.warn('DELETED');
 						console.log(res.json());
 						let patientUids = Object.keys(res.json())
 						console.log(patientUids);
@@ -90,4 +92,35 @@ export class PatientEpic {
 			return Observable.of()
 		})
 	}
+
+	DeletePatient = (actions$ : ActionsObservable<any>)=>{
+		return actions$.ofType(DELETE)
+		.switchMap(({payload , navCtrl})=>{
+			let headers = new Headers;
+			headers.append('Content-Type','application/json');
+			// let deleteUrl = 'http://localhost:5000/patient-tracker-b35bc/us-central1/deletePatient';
+			console.log('delete epic',payload);
+		    let uid = payload.userId;
+			payload.currentUserId = this.afAuth.auth.currentUser.uid;
+		return	this.http.post('http://localhost:5000/patient-tracker-b35bc/us-central1/deletePatient',payload)
+		.switchMap(res => {
+				console.log(res);
+                navCtrl()
+				return Observable.of({type : DELETE_SUCCESS, payload :uid})
+			})
+			// ,(err)=>{
+            //     return Observable.of()
+			})
+		
+		// })
+	}
+
+	// getRealtimePatient = (actions$ : ActionsObservable<any>)=>{
+	// 	return actions$.ofType(DELETE)
+	// 	.switchMap(() => {
+	// 		let headers = new Headers;
+	// 		headers.append('Content-type','application/json');
+	// 		return Observable.of()
+	// 	})
+// }
 }

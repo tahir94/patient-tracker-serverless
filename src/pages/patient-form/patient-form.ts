@@ -35,10 +35,10 @@ export class PatientFormPage implements OnInit {
   ngOnInit(){
 	this.patientForm = this.fb.group({
 
-		patientName: '',
-		patientAge: '',
-		patientAddress: '',
-		gender: ''
+		patientName: 'patient 1',
+		patientAge: '20',
+		patientAddress: '123456',
+		gender: 'male'
 	})
   }
 
@@ -49,7 +49,8 @@ export class PatientFormPage implements OnInit {
   addPatient(){
 	 this.ngRedux.dispatch({
 		 type : ADD_PATIENT,
-		 payload : this.patientForm.value
+		 payload : this.patientForm.value,
+		 navCtrl : () => this.navCtrl.pop() 
 	 })
 	 
   }

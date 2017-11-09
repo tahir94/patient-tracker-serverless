@@ -18,3 +18,5 @@ export const EDIT_SUCCESS =  'EDIT_SUCCESS' ;
 
 export const GET_PATIENT =  'GET_PATIENT' ;
 export const GET_PATIENT_SUCCESS =  'GET_PATIENT_SUCCESS' ;
+
+export const GET_REALTIME_UPDATE = "GET_REALTIME_UPDATE";

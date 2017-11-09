@@ -15,12 +15,17 @@ import * as AddPatient from './lib/addPatient'
 
 
 admin.initializeApp(functions.config().firebase)
-import { listener,getPatientListener,fetchPatientsListener,editListener } from './lib/addPatient';
+import { listener,getPatientListener,fetchPatientsListener,editListener,deleteListener,realtimePatientListener } from './lib/addPatient';
+
 import { signupListener,loginListener,checkUserListener } from "./lib/auth";
+// export { signupListener,loginListener,checkUserListener }
+
 export const addPatient = listener;
 export const getPatients = getPatientListener;
 export const fetchPatients = fetchPatientsListener;
 export const editPatient = editListener;
+export const deletePatient = deleteListener;
+export const realtimePatientChanges = realtimePatientListener;
 export const signup = signupListener;
 export const login = loginListener;
 export const checkUser = checkUserListener;
