@@ -229,27 +229,27 @@ exports.listener = functions.https.onRequest((req, res) => __awaiter(this, void 
 }));
 exports.getPatientListener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
     cors(req, res, () => {
-        console.log('server get func !', req.query.uid);
+        console.log('SERVER GET : UID !', req.query.uid);
         patient_1.PatientClass.getPatient(req.query.uid).then((success) => {
-            console.log('get server success', success);
+            console.log('SERVER GET : SUCCESS !', success);
             res.send(success);
         }).catch((error) => {
-            console.log('get server error', error);
+            console.log('SERVER GET : ERROR !', error);
             res.send(error);
         });
     });
 }));
 exports.fetchPatientsListener = functions.https.onRequest((req, res) => __awaiter(this, void 0, void 0, function* () {
     cors(req, res, () => {
-        console.log('server fetch patients', req.query.patientUids);
+        console.log('SERVER FETCH : UIDS !', req.query.patientUids);
         patient_1.PatientClass.fetchPatients(req.query.patientUids).then((success) => {
-            console.log('fetch success3', success);
+            console.log('SERVER FETCH : SUCCESS !', success);
             // success.forEach((element : any)=> {
             // 	console.log('eleee',element);
             // });
             res.send(success);
         }).catch((error) => {
-            console.log('fetch error', error);
+            console.log('SERVER FETCH : ERROR !', error);
             res.send(error);
         });
     });
@@ -337,18 +337,17 @@ class PatientClass {
     }
     static getPatient(currentUserUid) {
         return new Promise((resolve, reject) => {
-            console.log('db currentUid', currentUserUid);
+            console.log('DB GET : CURRENT UID', currentUserUid);
             patientRef.doc(currentUserUid).get().then((doc => {
                 if (doc.exists) {
-                    console.log('document data', doc.data());
+                    console.log('DB GET : DOC DATA !', doc.data());
                     resolve(doc.data());
                 }
-                else if (!doc.data()) {
-                    console.log('no such document');
-                    reject('no such document');
+                else {
+                    reject(doc.data());
                 }
             })).catch((error) => {
-                console.log('error document', error);
+                console.log('DB GET : ERROR DOC !', error);
                 reject(error);
             });
             // .then((success)=>{
@@ -361,21 +360,21 @@ class PatientClass {
     static fetchPatients(patientUids) {
         return new Promise((resolve, reject) => {
             docRef.get().then(snapshot => {
-                console.log('snapshot', snapshot);
+                console.log('DB FETCH : SNAPSHOT !', snapshot);
                 let arr1 = [];
                 let patArray = [];
                 patArray = patientUids.split(',');
                 snapshot.docChanges.forEach((doc) => {
-                    console.log('[doc id]', doc.doc.id);
-                    console.log('[pat arr]', patArray);
+                    console.log('DB FETCH : [doc id] !', doc.doc.id);
+                    console.log('DB FETCH : [pat arr] !', patArray);
                     patArray.forEach((param) => {
-                        console.log('param2', param);
+                        console.log('DB FETCH : PARAM !', param);
                         if (doc.doc.id == param) {
                             arr1.push(doc.doc.data());
                         }
                     });
                 });
-                console.info('RESOLVE :::---::: ', arr1);
+                console.info('DB FETCH :RESOLVE :: ', arr1);
                 resolve(arr1);
             }).catch(error => {
                 reject(error);

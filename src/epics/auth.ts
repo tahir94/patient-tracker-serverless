@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { ActionsObservable } from 'redux-observable';
 import { Http, Headers } from '@angular/http';
 import { AngularFireAuth } from 'angularfire2/auth';
-
+import * as firebase from 'firebase';
 
 import { NgRedux, select } from "ng2-redux";
 import { AppState } from '../reducers/rootReducer';
-import { SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAILED,LOGIN_FAILED } from "../actions/auth";
+import { SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAILED,LOGIN_FAILED,SET_DATA_LOCALLLY,LOCAL_DATA_SUCCESS } from "../actions/auth";
 // rxjs imports
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -22,6 +22,42 @@ import { LOGIN, LOGIN_SUCCESS, LOGOUT, LOGOUT_SUCCESS, GET_DATA_LOCALLY } from "
 export class AuthEpic {
 	constructor(private http: Http,
 		private afAuth: AngularFireAuth) { }
+
+		SetDataLocally = (actions$ : ActionsObservable<any>)=>{
+			return actions$.ofType(SET_DATA_LOCALLLY)
+			.switchMap(({payload})=>{
+				console.warn('SET ITME');
+				
+			localStorage.setItem('token',payload.uid)	
+				return Observable.of()
+			})
+		}
+
+		GetDataLocal = (actions$ : ActionsObservable<any>)=>{
+			return actions$.ofType(GET_DATA_LOCALLY)
+			.switchMap(({navCtrl})=>{
+				// console.warn('GET ITEM');
+				// console.log(localStorage.getItem('token'));
+			    new Promise((resolve,reject)=>{
+
+				   firebase.auth().onAuthStateChanged((user)=>{
+										
+						if(localStorage.getItem('token')){
+							console.warn('tokenn');
+							
+								 navCtrl();
+								}
+							})
+							
+						}) 
+						return Observable.of({type : LOCAL_DATA_SUCCESS,payload : 'local data success'})
+				   
+				   
+					
+				
+			})
+		}
+
 	Signup = (actions$: ActionsObservable<any>) => {
 
 
@@ -92,12 +128,13 @@ export class AuthEpic {
 			})
 	}
 
-	// Logout = (actions$ : ActionsObservable<any>)=>{
-	// 	return actions$.ofType(LOGOUT)
-	// 	.switchMap(({navCtrl})=>{
-	// 		localStorage.removeItem('token')
-	// 		navCtrl();
-	// 		return Observable.of()
-	// 	})
-	// }
+	Logout = (actions$ : ActionsObservable<any>)=>{
+		return actions$.ofType(LOGOUT)
+		.switchMap(({navCtrl})=>{
+			this.afAuth.auth.signOut();
+			localStorage.removeItem('token');
+			navCtrl();
+			return Observable.of({type  : LOGOUT_SUCCESS})
+		})
+	}
 }

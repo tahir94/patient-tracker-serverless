@@ -8,6 +8,7 @@ import { Observable } from "rxjs";
 import { SignupPage } from "../signup/signup";
 import { LOGIN, GET_DATA_LOCALLY } from "../../actions/auth";
 import { HomePage } from "../home/home";
+import { EmailValidator } from '../../validators/email';
 // import { EmailValidator } from '../../validators/email';
 /**
  * Generated class for the LoginPage page.
@@ -21,26 +22,42 @@ import { HomePage } from "../home/home";
   selector: 'page-login',
   templateUrl: 'login.html',
 })
-export class LoginPage {
 
-	loginForm: FormGroup;
+export class LoginPage {
+    @select((s : AppState)=>s.auth.isLoggedIn) isLoggedIn$ : Observable<Boolean>;
+    @select((s : AppState)=>s.patient.isLoading) isLoading$ : Observable<Boolean>;
+    loginForm: FormGroup;
     constructor(private fb: FormBuilder,
         private navCtrl: NavController,
         private ngRedux: NgRedux<AppState>) {
+            this.isLoading$.subscribe((data)=>{
+                console.log(data);
+                
+      
+            })
+            this.isLoggedIn$.subscribe((data)=>{
+                console.log(data);
+                
+      
+            })
+			this.ngRedux.dispatch({
+				type: GET_DATA_LOCALLY,
+				navCtrl: () => this.navCtrl.push(HomePage)
+			})
 
         // this.ngRedux.dispatch({
         //     type: GET_DATA_LOCALLY,
         //     navCtrl: () => this.navCtrl.push(HomePage)
 		// })
 		
-        // this.loginForm = this.fb.group({
-        //     userEmail: [null, Validators.compose([Validators.required, EmailValidator.isValid])],
-        //     userPassword: [null, Validators.compose([Validators.minLength(6), Validators.required])]
-		// })
-		this.loginForm = this.fb.group({
-			userEmail : 'b@a.com',
-			userPassword : '000000'
+        this.loginForm = this.fb.group({
+            userEmail: [null, Validators.compose([Validators.required, EmailValidator.isValid])],
+            userPassword: [null, Validators.compose([Validators.minLength(6), Validators.required])]
 		})
+		// this.loginForm = this.fb.group({
+		// 	userEmail : 'b@a.com',
+		// 	userPassword : '000000'
+		// })
     }
 
     login() {

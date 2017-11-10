@@ -10,3 +10,5 @@ export const LOGOUT = "LOGOUT";
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 
 export const GET_DATA_LOCALLY = "GET_DATA_LOCALLY";
+export const LOCAL_DATA_SUCCESS =  'LOCAL_DATA_SUCCESS';
+export const SET_DATA_LOCALLLY =  'SET_DATA_LOCALLLY';

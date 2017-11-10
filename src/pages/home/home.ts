@@ -7,6 +7,7 @@ import { Observable } from "rxjs";
 import {GET_REALTIME_UPDATE } from "../../actions/patient";
 
 import { GET_PATIENT } from "../../actions/patient";
+import { LOGOUT,SET_DATA_LOCALLLY } from "../../actions/auth";
 
 import { PatientDetailsPage } from "../patient-details/patient-details";
 
@@ -14,12 +15,18 @@ import { PatientDetailsPage } from "../patient-details/patient-details";
   selector: 'page-home',
   templateUrl: 'home.html'
 })
+
 export class HomePage implements OnInit {
+	isLaoder : Boolean;
+	isPatientList : Boolean;
+	
 	@select((s : AppState)=>s.auth.userData) userData$ : Observable<Object>;
-	@select((s : AppState)=>s.auth.errorMessage) errorMessage$ : Observable<string>;
+	@select((s : AppState)=>s.auth.errorMessage) errorMessage$ : Observable<string>;	
 	@select((s : AppState)=>s.patient.patientData) patientData$ : Observable<Array<any>>;
 	@select((s : AppState)=>s.patient.patientForm) patientForm$ : Observable<Array<any>>;
 	@select((s : AppState)=>s.patient.patientUids) patientUids$ : Observable<Array<any>>;
+	@select((s : AppState)=>s.patient.isLoading) isLoading$ : Observable<Boolean>;
+	@select((s : AppState)=>s.patient.isPatientList) isPatientList$ : Observable<Boolean>;
 
   constructor(public navCtrl: NavController,
 			 private ngRedux : NgRedux<AppState>) {
@@ -27,17 +34,31 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit(){
+
+	  
+	  this.isPatientList$.subscribe((data)=>{
+		  console.log('is patient list data ! ',data);
+		  if(data){
+			  this.isPatientList = data
+			}
+		})
+		this.isLoading$.subscribe((data)=>{
+			console.log('is loading data ! ',data);
+			if(data){
+				this.isLaoder = data
+			}
+		})
 		this.patientForm$.subscribe((data)=>{
 			console.log(data);
 			
 			if(data){
-					this.ngRedux.dispatch({
+				this.ngRedux.dispatch({
 					type : GET_PATIENT
 				});
 				
 			}
 		})
-	console.log('HOME LOG!!');
+		console.log('HOME LOG!!');
 		this.ngRedux.dispatch({
 			type: GET_REALTIME_UPDATE
 		})
@@ -51,10 +72,14 @@ export class HomePage implements OnInit {
 		this.patientData$.subscribe((data)=>{
 			console.log('patient data',data);
 		})
-
-	  this.userData$.subscribe((data)=>{
-		if(data){
-			console.log(data);
+		
+		this.userData$.subscribe((data)=>{
+			if(data){
+				console.log(data);
+				this.ngRedux.dispatch({
+					type: SET_DATA_LOCALLLY,
+					payload: data,
+				})
 		}
 	  });
 
@@ -76,6 +101,13 @@ itemTapped(item, index) {
 			this.navCtrl.push(PatientDetailsPage, {
 				item,
 				index
+			})
+		}
+
+		logout() {
+			this.ngRedux.dispatch({
+				type: LOGOUT,
+				navCtrl: () => this.navCtrl.pop()
 			})
 		}
 

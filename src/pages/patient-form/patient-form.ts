@@ -35,10 +35,10 @@ export class PatientFormPage implements OnInit {
   ngOnInit(){
 	this.patientForm = this.fb.group({
 
-		patientName: 'patient 1',
-		patientAge: '20',
-		patientAddress: '123456',
-		gender: 'male'
+		patientName: [null, Validators.required],
+		patientAge: [null, Validators.required],
+		patientAddress: [null, Validators.required],
+		gender: [null, Validators.required]
 	})
   }
 
@@ -52,7 +52,7 @@ export class PatientFormPage implements OnInit {
 		 payload : this.patientForm.value,
 		 navCtrl : () => this.navCtrl.pop() 
 	 })
-	 
+	//  this.patientForm.reset();
   }
 
   

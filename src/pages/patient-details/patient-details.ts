@@ -42,7 +42,6 @@ export class PatientDetailsPage {
   }
 //   isPatientEdit2 = true;
 //   isPatientEdit(index){
-
 // 	console.log(index);
 // 	if(index == '2.2'){
 // 		return false;

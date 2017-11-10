@@ -7,8 +7,7 @@ import { AppState } from '../reducers/rootReducer';
 
 import {
 	ADD_PATIENT, ADD_PATIENT_SUCCESS, DELETE,
-	DELETE_SUCCESS, GET_PATIENT, GET_PATIENT_SUCCESS,
-	SET_DATA_LOCALLLY, LOCAL_DATA_SUCCESS,EDIT,EDIT_SUCCESS,
+	DELETE_SUCCESS, GET_PATIENT, GET_PATIENT_SUCCESS,EDIT,EDIT_SUCCESS,
 	DOC_PATIENT_UIDS_SUCCESS
 } from "../actions/patient";
 
@@ -26,7 +25,7 @@ import 'rxjs/add/observable/fromPromise';
 @Injectable()
 
 export class PatientEpic {
-	constructor(private http: Http, private afAuth: AngularFireAuth) {
+	constructor(private http: Http, private afAuth: AngularFireAuth,private ngRedux :NgRedux<AppState> ) {
 
 	}
 	Patient = (actions$: ActionsObservable<any>) => {
@@ -40,7 +39,12 @@ export class PatientEpic {
 				payload['userId'] = this.afAuth.auth.currentUser.uid;
 				this.http.post(url, payload, { headers: headers })
 					.subscribe((res) => {
-						console.log(res);
+						console.log('ADD PATIENT RES !',res);
+						if(res){
+							this.ngRedux.dispatch({
+								type : GET_PATIENT
+							})
+						}
 						// navCtrl();
 					})
 				return Observable.of({ type: ADD_PATIENT_SUCCESS, payload: payload });
@@ -59,16 +63,15 @@ export class PatientEpic {
 
 			return	this.http.get('http://localhost:5000/patient-tracker-b35bc/us-central1/getPatients/?uid=' + currentUserUid)
 					.switchMap((res => {
-						
-						console.warn('DELETED');
-						console.log(res.json());
+
+						console.log('GET RES : ',res.json());
 						let patientUids = Object.keys(res.json())
-						console.log(patientUids);
+						console.log('GET PATIENT UIDS !',patientUids);
 
 					return	this.http.get('http://localhost:5000/patient-tracker-b35bc/us-central1/fetchPatients/?patientUids=' + patientUids)
 							.switchMap((res => {
 
-								console.log('fetch epic', res.json());
+								console.log('FETCH RES !', res.json());
 
 								return Observable.of({type: GET_PATIENT_SUCCESS,payload : res.json()})
 							}))

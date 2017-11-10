@@ -12,7 +12,6 @@ const patientRef2 = admin.firestore().collection('doctorPatientsUids');
 
 export class PatientClass {
 	//patientRef2: Angu
-
 	static addPatient(getData: any) {
 		return new Promise((resolve, reject) => {
 
@@ -37,27 +36,27 @@ export class PatientClass {
 	static getPatient(currentUserUid: any) {
 		return new Promise((resolve, reject) => {
 			
-			console.log('db currentUid', currentUserUid);
+			console.log('DB GET : CURRENT UID', currentUserUid);
 			patientRef.doc(currentUserUid).get().then((doc => {
 				if (doc.exists) {
-					console.log('document data', doc.data());
+					console.log('DB GET : DOC DATA !', doc.data());
 					resolve(doc.data())
 				}
-				else if(!doc.data()){
-					console.log('no such document');
-					reject('no such document')
+				else {
+					
+					reject(doc.data())
 				}
+
+				
 			})).catch((error) => {
-				console.log('error document', error);
+				console.log('DB GET : ERROR DOC !', error);
 				reject(error)
 			})
 			// .then((success)=>{
 			// 	console.log(success);
-
 			// }).catch((error)=>{
 			// 	reject()
 			// })
-
 		})
 	}
 
@@ -65,22 +64,22 @@ export class PatientClass {
 		return new Promise((resolve, reject) => {
 			
 			docRef.get().then(snapshot => {
-				console.log('snapshot', snapshot)
+				console.log('DB FETCH : SNAPSHOT !', snapshot)
 				let arr1: any = []
 				let patArray: any = []
 				patArray = patientUids.split(',')
 				snapshot.docChanges.forEach((doc) => {
 
-					console.log('[doc id]', doc.doc.id);
-					console.log('[pat arr]', patArray);
+					console.log('DB FETCH : [doc id] !', doc.doc.id);
+					console.log('DB FETCH : [pat arr] !', patArray);
 					patArray.forEach((param: any) => {
-						console.log('param2', param);
+						console.log('DB FETCH : PARAM !', param);
 						if (doc.doc.id == param) {
 							arr1.push(doc.doc.data())
 						}
 					})
 				})
-				console.info('RESOLVE :::---::: ', arr1);
+				console.info('DB FETCH :RESOLVE :: ', arr1);
 				resolve(arr1)
 
 			}).catch(error => {
@@ -106,48 +105,35 @@ export class PatientClass {
 				})
 			// if (editData.hasOwnProperty('patientName')) {
 			// 	console.log('ccc');
-
 			// 	console.log('hasOwnProp', editData.hasOwnProperty('patientName'));
 			// 	docRef.doc(editData.userId).update({ patientName: editData.patientName }).then(success => {	
-
 			// 		resolve(success)
 			// 	}).catch(error => {
 			// 		reject(error)
 			// 	});
-
 			// }
 			// else {
 			// 	console.log('hasOwnProp', editData);
-
 			// 	docRef.doc(editData.userId).update({ patientAge: editData.patientAge }).then(success => {
-
 			// 		resolve(success)
 			// 	}).catch(error => {
 			// 		reject(error)
 			// 	})
-
 			// }
 			// else if (editData.hasOwnProperty('patientAddress')) {
-
 			// 	docRef.doc(editData.userId).update({ patientName: editData.patientAddress }).then(success => {
-
 			// 		resolve(success)
 			// 	}).catch(error => {
 			// 		reject(error)
 			// 	})
-
 			// }
 			// else {
-
 			// 	docRef.doc(editData.userId).update({ patientName: editData.gender }).then(success => {
-
 			// 		resolve(success)
 			// 	}).catch(error => {
 			// 		reject(error)
 			// 	})
-
 			// }
-
 
 		})
 		// .catch((error)=>{
@@ -185,7 +171,6 @@ export class PatientClass {
 			// 		}
 					
 			// 	})
-
 				//////////////////////////////// 
 				// for(let abc in doc.data()){
 					// console.log('abcc',doc.data()[abc]);
@@ -242,34 +227,25 @@ export class PatientClass {
 
 	// static realtimeChages(a: Function, deleteData: any){
 	// 	docRef.doc(deleteData.userId).get(
-
 	// 	)
-
 	// }
 
 
-
 	// 	static fetchPatients(patientUids: any) {
-
 	// 		// ********************************
 	// 		// console.log('db fetch!', patientUids);
 	// 		// ********************************
-
 	// 		return new Promise((resolve, reject) => {
-
 	// // ********************************
 	// 			// docRef.get().then((doc)=>{
 	// // ********************************
-
 	// 			docRef.get().then((querySnapshot) => {
 	// 				let pat1: any = []
 	// 				querySnapshot.forEach((doc) => {
-
 	// 					// ********************************
 	// 					// console.log(doc.id, " =>------ ", doc.data());
 	// 					// console.log('in forEach uids', patientUids);
 	// 					// ********************************
-
 	// 					let fil = patientUids.split(',').map((abc: any) => {
 	// 						if (abc.toLowerCase() === doc.id.toLowerCase()) {
 	// 							console.log("doctadsad ", doc.data())
@@ -279,14 +255,11 @@ export class PatientClass {
 	// 					if (fil.length) {
 	// 						pat1.push(...fil)
 	// 					}
-
 	// 					// ********************************
 	// 					// if (doc.id == patientUids) {
 	// 					// 	console.log('if uids', doc.id, "=====", doc.data());
-
 	// 					// }
 	// 					// ********************************
-
 	// 					console.warn(' ======----=======----------=== ', fil)
 	// 				});
 	// 				console.log('#########################', pat1)
@@ -295,23 +268,18 @@ export class PatientClass {
 	// 				console.log('error in fetch doc', error);
 	// 				reject(error)
 	// 			})
-
 	// 			// ********************************
 	// 			// if(doc.docs){
 	// 			// 	console.log('fetch doc data',doc.docs);
 	// 			// 	resolve(doc.docs)					
 	// 			// }
 	// 			// else {
-
 	// 			// 	console.log('nothing in fetch doc', doc.docs);					
 	// 			// }
 	// 			// ********************************
-
 	// 		})
-
 	// 		// ********************************
 	// 		// })
 	// 		// ********************************
-
 	// 	}
 }

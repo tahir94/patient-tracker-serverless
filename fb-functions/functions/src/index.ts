@@ -13,13 +13,11 @@ import * as AddPatient from './lib/addPatient'
 // 	messagingSenderId: "929949000487"
 // };
 
-
 admin.initializeApp(functions.config().firebase)
 import { listener,getPatientListener,fetchPatientsListener,editListener,deleteListener,realtimePatientListener } from './lib/addPatient';
 
 import { signupListener,loginListener,checkUserListener } from "./lib/auth";
 // export { signupListener,loginListener,checkUserListener }
-
 export const addPatient = listener;
 export const getPatients = getPatientListener;
 export const fetchPatients = fetchPatientsListener;
@@ -43,12 +41,9 @@ export const firestore = functions.firestore;
 
 
 // export const makeUpperCase = UpCaseMessages.listener
-
 // admin.initializeApp(functions.config().firestore);
 // export const firestore = admin.firestore();
 
-
 //   firestore.initializeApp(config)
-
 // admin.initializeApp(functions.config().firestore);
 // admin.initializeApp(config);

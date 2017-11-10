@@ -18,6 +18,7 @@ export const listener = functions.https.onRequest(async (req: Request, res: Resp
 
 			AuthClass.OnPatientSuccess(success).then((succ)=>{
 				console.log('SUCC ON PAT: SERVER ',succ);
+				
 				res.send(succ)
 			}) .catch(a=>{
 				console.log('ERR ON PAT: SERVER ',a);
@@ -34,12 +35,13 @@ export const listener = functions.https.onRequest(async (req: Request, res: Resp
 
 export const getPatientListener = functions.https.onRequest(async (req: Request, res: Response) => {
 	cors(req, res, () => {
-		console.log('server get func !', req.query.uid);
+		console.log('SERVER GET : UID !', req.query.uid);
 		PatientClass.getPatient(req.query.uid).then((success) => {
-			console.log('get server success', success);
+			console.log('SERVER GET : SUCCESS !', success);
 			res.send(success);
+
 		}).catch((error) => {
-			console.log('get server error', error);
+			console.log('SERVER GET : ERROR !', error);
 			res.send(error);
 		})
 
@@ -48,16 +50,15 @@ export const getPatientListener = functions.https.onRequest(async (req: Request,
 
 export const fetchPatientsListener = functions.https.onRequest(async (req: Request, res: Response) => {
 	cors(req, res, () => {
-		console.log('server fetch patients', req.query.patientUids);
+		console.log('SERVER FETCH : UIDS !', req.query.patientUids);
 		PatientClass.fetchPatients(req.query.patientUids).then((success: any) => {
-			console.log('fetch success3', success);
+			console.log('SERVER FETCH : SUCCESS !', success);
 			// success.forEach((element : any)=> {
 			// 	console.log('eleee',element);
-
 			// });
 			res.send(success);
 		}).catch((error: any) => {
-			console.log('fetch error', error);
+			console.log('SERVER FETCH : ERROR !', error);
 			res.send(error)
 
 		})

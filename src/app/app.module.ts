@@ -82,6 +82,9 @@ export class AppModule {
 				createEpicMiddleware(this.patientEpic.DeletePatient),
 				createEpicMiddleware(this.authEpic.Login),
 				createEpicMiddleware(this.authEpic.Signup),
+				createEpicMiddleware(this.authEpic.Logout),
+				createEpicMiddleware(this.authEpic.SetDataLocally),
+				createEpicMiddleware(this.authEpic.GetDataLocal),
 			]
 
 			
@@ -90,4 +93,3 @@ export class AppModule {
 	}
 	
 }
-
