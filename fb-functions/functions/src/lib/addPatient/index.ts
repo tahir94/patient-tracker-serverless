@@ -11,23 +11,16 @@ export const listener = functions.https.onRequest(async (req: Request, res: Resp
 
 
 	cors(req, res, () => {
-		console.log('ADD PAT: SERVER', req.body);
+
 
 		PatientClass.addPatient(req.body).then((success) => {
-			console.log('ADD PAT SUCC: SERVER ', success.user_id);
+			AuthClass.OnPatientSuccess(success).then((succ) => {
+				res.send(succ);
 
-			AuthClass.OnPatientSuccess(success).then((succ)=>{
-				console.log('SUCC ON PAT: SERVER ',succ);
-				
-				res.send(succ)
-			}) .catch(a=>{
-				console.log('ERR ON PAT: SERVER ',a);
+			}).catch(a => {
 				res.send(a)
 			})
-
-			// res.send(success)
 		}).catch((err) => {
-			console.log(err);
 			res.send(err)
 		})
 	})
@@ -35,13 +28,10 @@ export const listener = functions.https.onRequest(async (req: Request, res: Resp
 
 export const getPatientListener = functions.https.onRequest(async (req: Request, res: Response) => {
 	cors(req, res, () => {
-		console.log('SERVER GET : UID !', req.query.uid);
 		PatientClass.getPatient(req.query.uid).then((success) => {
-			console.log('SERVER GET : SUCCESS !', success);
 			res.send(success);
 
 		}).catch((error) => {
-			console.log('SERVER GET : ERROR !', error);
 			res.send(error);
 		})
 
@@ -50,15 +40,10 @@ export const getPatientListener = functions.https.onRequest(async (req: Request,
 
 export const fetchPatientsListener = functions.https.onRequest(async (req: Request, res: Response) => {
 	cors(req, res, () => {
-		console.log('SERVER FETCH : UIDS !', req.query.patientUids);
 		PatientClass.fetchPatients(req.query.patientUids).then((success: any) => {
-			console.log('SERVER FETCH : SUCCESS !', success);
-			// success.forEach((element : any)=> {
-			// 	console.log('eleee',element);
-			// });
+
 			res.send(success);
 		}).catch((error: any) => {
-			console.log('SERVER FETCH : ERROR !', error);
 			res.send(error)
 
 		})
@@ -67,59 +52,24 @@ export const fetchPatientsListener = functions.https.onRequest(async (req: Reque
 
 export const editListener = functions.https.onRequest(async (req: Request, res: Response) => {
 	cors(req, res, () => {
-		console.log('server edit', req.body);
 
 		PatientClass.editListener(req.body).then((success) => {
-			console.log('success edit server', success);
 			res.send(success)
 		}).catch((error) => {
-			console.log('111111111111111111111', req.body);
-			console.log('error edit server', error);
 			res.send(error)
 		})
 	})
-	
+
 })
 
-export const deleteListener = functions.https.onRequest(async(req : Request,res : Response)=>{
-	cors(req,res, ()=>{
-	console.log('delete req',req.body);	
-	 PatientClass.deletePatient(req.body).then(success=>{
-		 console.log(success);
-		 res.send(success);
-		//  if(success){
-		// 	cors(req, res, () => {
-		// 		console.log('server get func !', req.query.uid);
-		// 		PatientClass.getPatient(req.query.uid).then((success) => {
-		// 			console.log('get server success', success);
-		// 			res.send(success);
-		// 		}).catch((error) => {
-		// 			console.log('get server error', error);
-		// 			res.send(error);
-		// 		})
-		
-		// 	})
-		// 	//  res.redirect('/fetchPatients')
-		// 	//  PatientClass.realtimeChages(((a: any) => res.send(a)), req.body)
-		//  }
-		 
+export const deleteListener = functions.https.onRequest(async (req: Request, res: Response) => {
+	cors(req, res, () => {
+		PatientClass.deletePatient(req.body).then(success => {
+			res.send(success);
 
-	 }).catch(error => {
-		 console.log(error);
-		 res.send(error);
-		 
-	 })	
+		}).catch(error => {
+			res.send(error);
+
+		})
 	})
-})
- 
-export const realtimePatientListener = functions.https.onRequest(async(req:Request,res: Response)=>{
-cors(req,res,()=>{
-	PatientClass.realTimePatient().then(success=>{
-		console.log('success server realtime',success);
-		
-	}).catch(error=>{
-		console.log('error server realtime',error);
-		
-	})
-})
 })

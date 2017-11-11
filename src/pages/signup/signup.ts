@@ -8,48 +8,37 @@ import { Observable } from "rxjs";
 import { SIGNUP } from "../../actions/auth";
 import { HomePage } from "../home/home";
 import { EmailValidator } from '../../validators/email';
-// import { EmailValidator } from '../../validators/email';
-/**
- * Generated class for the SignupPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+
 
 @IonicPage()
 @Component({
-  selector: 'page-signup',
-  templateUrl: 'signup.html',
+	selector: 'page-signup',
+	templateUrl: 'signup.html',
 })
 export class SignupPage {
 
 	signupForm: FormGroup;
-	
-	  constructor(private fb: FormBuilder,
+
+	constructor(private fb: FormBuilder,
 		private ngRedux: NgRedux<AppState>,
 		private navCtrl: NavController) {
 		this.signupForm = this.fb.group({
-		  userName: [null, Validators.required],
-		  userEmail: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
-		  userPassword: [null, Validators.compose([Validators.minLength(6), Validators.required])]
+			userName: [null, Validators.required],
+			userEmail: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
+			userPassword: [null, Validators.compose([Validators.minLength(6), Validators.required])]
 		})
-		// this.signupForm = this.fb.group({
-		// 	userName: '',
-		// 	userEmail: '',
-		// 	userPassword: ''
-		//   })
-	  }
-	
-	  signup() {
+	}
+
+	signup() {
 		this.ngRedux.dispatch({
-		  type: SIGNUP,
-		  payload: this.signupForm.value,
-		  navCtrl: () => this.navCtrl.push(HomePage),
+			type: SIGNUP,
+			payload: this.signupForm.value,
+			navCtrl: () => this.navCtrl.push(HomePage),
 		})
 		this.signupForm.reset();
-	  }
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SignupPage');
-  }
+	}
+	ionViewDidLoad() {
+		console.log('ionViewDidLoad SignupPage');
+	}
 
 }

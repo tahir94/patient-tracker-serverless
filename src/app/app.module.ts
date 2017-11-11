@@ -27,69 +27,69 @@ import { AuthEpic } from '../epics';
 
 export const firebaseConfig = {
 	apiKey: "AIzaSyCAyEGLfGYJ0SOZsB1a16vCAt4LLDFYeuY",
-		authDomain: "patient-tracker-b35bc.firebaseapp.com",
-		databaseURL: "https://patient-tracker-b35bc.firebaseio.com",
-		projectId: "patient-tracker-b35bc",
-		storageBucket: "patient-tracker-b35bc.appspot.com",
-		messagingSenderId: "929949000487"
-  };
+	authDomain: "patient-tracker-b35bc.firebaseapp.com",
+	databaseURL: "https://patient-tracker-b35bc.firebaseio.com",
+	projectId: "patient-tracker-b35bc",
+	storageBucket: "patient-tracker-b35bc.appspot.com",
+	messagingSenderId: "929949000487"
+};
 
 @NgModule({
-  declarations: [
-    MyApp,
-	HomePage,
-	PatientFormPage,
-	LoginPage,
-	SignupPage,
-	PatientDetailsPage
-  ],
-  imports: [
-    BrowserModule,
-	IonicModule.forRoot(MyApp),
-	NgReduxModule,
-	HttpModule,
-	AngularFireAuthModule,
-	AngularFireDatabaseModule,
-	AngularFireModule.initializeApp(firebaseConfig),
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-	HomePage,
-	PatientFormPage,
-	LoginPage,
-	SignupPage,
-	PatientDetailsPage
-  ],
-  providers: [
-	PatientEpic,
-	AuthEpic,
-    StatusBar,
-	SplashScreen,
-	AngularFireDatabase,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
-  ]
+	declarations: [
+		MyApp,
+		HomePage,
+		PatientFormPage,
+		LoginPage,
+		SignupPage,
+		PatientDetailsPage
+	],
+	imports: [
+		BrowserModule,
+		IonicModule.forRoot(MyApp),
+		NgReduxModule,
+		HttpModule,
+		AngularFireAuthModule,
+		AngularFireDatabaseModule,
+		AngularFireModule.initializeApp(firebaseConfig),
+	],
+	bootstrap: [IonicApp],
+	entryComponents: [
+		MyApp,
+		HomePage,
+		PatientFormPage,
+		LoginPage,
+		SignupPage,
+		PatientDetailsPage
+	],
+	providers: [
+		PatientEpic,
+		AuthEpic,
+		StatusBar,
+		SplashScreen,
+		AngularFireDatabase,
+		{ provide: ErrorHandler, useClass: IonicErrorHandler }
+	]
 })
 export class AppModule {
 	constructor(private ngRedux: NgRedux<AppState>,
 		private patientEpic: PatientEpic,
-		private authEpic : AuthEpic){
+		private authEpic: AuthEpic) {
 
-			const middleware = [
-				createEpicMiddleware(this.patientEpic.Patient),
-				createEpicMiddleware(this.patientEpic.GetPatient),
-				createEpicMiddleware(this.patientEpic.EditPatient),
-				createEpicMiddleware(this.patientEpic.DeletePatient),
-				createEpicMiddleware(this.authEpic.Login),
-				createEpicMiddleware(this.authEpic.Signup),
-				createEpicMiddleware(this.authEpic.Logout),
-				createEpicMiddleware(this.authEpic.SetDataLocally),
-				createEpicMiddleware(this.authEpic.GetDataLocal),
-			]
+		const middleware = [
+			createEpicMiddleware(this.patientEpic.Patient),
+			createEpicMiddleware(this.patientEpic.GetPatient),
+			createEpicMiddleware(this.patientEpic.EditPatient),
+			createEpicMiddleware(this.patientEpic.DeletePatient),
+			createEpicMiddleware(this.authEpic.Login),
+			createEpicMiddleware(this.authEpic.Signup),
+			createEpicMiddleware(this.authEpic.Logout),
+			createEpicMiddleware(this.authEpic.SetDataLocally),
+			createEpicMiddleware(this.authEpic.GetDataLocal),
+		]
 
-			
 
-			ngRedux.configureStore(RootReducer, INITIAL_STATE, middleware)
+
+		ngRedux.configureStore(RootReducer, INITIAL_STATE, middleware)
 	}
-	
+
 }

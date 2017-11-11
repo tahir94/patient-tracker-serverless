@@ -1,23 +1,4 @@
 
-// import * as functions from 'firebase-functions';
-// import * as admin from 'firebase-admin';
-
-// var config = {
-// 	apiKey: "AIzaSyCAyEGLfGYJ0SOZsB1a16vCAt4LLDFYeuY",
-// 	authDomain: "patient-tracker-b35bc.firebaseapp.com",
-// 	databaseURL: "https://patient-tracker-b35bc.firebaseio.com",
-// 	projectId: "patient-tracker-b35bc",
-// 	storageBucket: "patient-tracker-b35bc.appspot.com",
-// 	messagingSenderId: "929949000487"
-// };
-
-// var defaultApp = admin.initializeApp(config)
-
-// const db = defaultApp.firestore();
-// export default db;
-
-
-
 
 
 

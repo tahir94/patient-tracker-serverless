@@ -11,13 +11,11 @@ currentUid : any;
 	constructor(public afAuth : AngularFireAuth){}
 	static Login(currentUserUid : Object){
 		return new Promise((resolve,reject)=>{
-			console.log('check type of',typeof currentUserUid);
-			console.log('check type of',currentUserUid);
 			
 			userRef.doc(currentUserUid.uid).get().then((doc)=>{
-				console.log('db uid log',currentUserUid);
+				
 				if(doc.exists){
-					console.log(doc.data());
+					
 					resolve(doc.data())
 				}
 				else { 
@@ -25,7 +23,6 @@ currentUid : any;
 				}
 				
 			}).catch((error)=>{
-				console.log('doc error',error);
 				reject(error)
 			})
 		})
@@ -44,7 +41,6 @@ currentUid : any;
 				console.log('signup data reject');
 				
 			})		
-
 		})
 	}
 
@@ -55,16 +51,12 @@ currentUid : any;
 			// userRef.doc(usersUids.user_id).update({patients : [{patientUids : usersUids.push_id,when: new Date()}]},{ merge: true })
 			docRef.doc(usersUids.push_id).update({userId : usersUids.push_id})
 			patientRef.doc(usersUids.user_id).update({[usersUids.push_id]: true})
-			.then(success=>{
-				console.log('ON PAT SUCC: DB',success);
-				
-				resolve(success)
-				
+			.then(success=>{				
+				resolve(success)				
 			})
 			.catch(a => {
 			
-					patientRef.doc(usersUids.user_id).set({[usersUids.push_id]: true})					
-					console.log('ON PAT CATCH: DB',a);
+					patientRef.doc(usersUids.user_id).set({[usersUids.push_id]: true});					
 					reject(a)
 			
 				})

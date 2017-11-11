@@ -1,6 +1,6 @@
 <ion-header sty>
 	<ion-navbar hideBackButton="true">
-			<button style="display : inline !important" class="menu-button" ion-button menuToggle>
+		<button style="display : inline !important" class="menu-button" ion-button menuToggle>
 					<ion-icon name="menu"></ion-icon>
 		</button>
 		<ion-title>
@@ -27,9 +27,6 @@
 
 <ion-nav id="nav" #content [root]="rootPage"></ion-nav>
 <ion-content padding>
-
-	
-
 	<div class="div_h2">
 		<h2 class="h2">Plaease Add A Patient</h2>
 		<hr>
@@ -37,15 +34,16 @@
 		<button ion-button style="background :#4DD0E1" round (click)="add()">Add Patient</button>
 	</div>
 
-
 	<div *ngIf="(patientData$ | async) else isLoading">
 		<div *ngIf="isPatientList$ | async">
-			<ion-list>
-				<button style="color :#4DD0E1;font-size: 1.3em" class="list-button" ion-item *ngFor="let a of patientData$ | async; let i = index"
-				 (click)="itemTapped(a,i)">
-			   {{a.patientName}}
-		  </button>
-			</ion-list>
+			<ion-card *ngFor="let a of patientData$ | async; let i = index">
+				<ion-list>
+					<button style="color :#4DD0E1;font-size: 1.3em" class="list-button" ion-item (click)="itemTapped(a,i)">
+				   {{a.patientName}}
+			  </button>
+				</ion-list>
+
+			</ion-card>
 		</div>
 	</div>
 	<ng-template #isLoading>

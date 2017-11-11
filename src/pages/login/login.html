@@ -6,7 +6,7 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="(isLoggedIn$ | async) else isLoading">
     <form style="margin-top: 50px;" [formGroup]="loginForm">
         <ion-list class="ion-list">
             <ion-item class="patient-name">
@@ -41,3 +41,8 @@
         <b>don't have account <a style="cursor: pointer" (click)="goToSignup()">Create Account</a></b>
     </div>
 </ion-content>
+<ng-template #isLoading>
+    <div>
+        <ion-spinner style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;margin: auto;" name="bubbles"></ion-spinner>
+    </div>
+</ng-template>

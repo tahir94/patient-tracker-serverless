@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ActionsObservable } from 'redux-observable';
-import { Http, Headers,RequestOptions,RequestOptionsArgs,RequestMethod } from '@angular/http';
+import { Http, Headers, RequestOptions, RequestOptionsArgs, RequestMethod } from '@angular/http';
 
 import { NgRedux, select } from "ng2-redux";
 import { AppState } from '../reducers/rootReducer';
 
 import {
 	ADD_PATIENT, ADD_PATIENT_SUCCESS, DELETE,
-	DELETE_SUCCESS, GET_PATIENT, GET_PATIENT_SUCCESS,EDIT,EDIT_SUCCESS,
+	DELETE_SUCCESS, GET_PATIENT, GET_PATIENT_SUCCESS, EDIT, EDIT_SUCCESS,
 	DOC_PATIENT_UIDS_SUCCESS
 } from "../actions/patient";
 
@@ -25,27 +25,28 @@ import 'rxjs/add/observable/fromPromise';
 @Injectable()
 
 export class PatientEpic {
-	constructor(private http: Http, private afAuth: AngularFireAuth,private ngRedux :NgRedux<AppState> ) {
+	constructor(private http: Http, private afAuth: AngularFireAuth, private ngRedux: NgRedux<AppState>) {
 
 	}
 	Patient = (actions$: ActionsObservable<any>) => {
 		return actions$.ofType(ADD_PATIENT)
-			.switchMap(({ payload,navCtrl }) => {
-				console.log('patient epic', payload);
+			.switchMap(({ payload, navCtrl }) => {
 				let headers = new Headers();
 
 				headers.append('Content-Type', 'application/json');
-				let url = 'http://localhost:5000/patient-tracker-b35bc/us-central1/addPatient';
+				// local url
+				// 'http://localhost:5000/patient-tracker-b35bc/us-central1/addPatient'
+				let url = "https://us-central1-patient-tracker-b35bc.cloudfunctions.net/addPatient";
 				payload['userId'] = this.afAuth.auth.currentUser.uid;
 				this.http.post(url, payload, { headers: headers })
 					.subscribe((res) => {
-						console.log('ADD PATIENT RES !',res);
-						if(res){
+
+						if (res) {
 							this.ngRedux.dispatch({
-								type : GET_PATIENT
+								type: GET_PATIENT
 							})
 						}
-						// navCtrl();
+						navCtrl();
 					})
 				return Observable.of({ type: ADD_PATIENT_SUCCESS, payload: payload });
 			})
@@ -54,76 +55,68 @@ export class PatientEpic {
 	GetPatient = (actions$: ActionsObservable<any>) => {
 		return actions$.ofType(GET_PATIENT)
 			.switchMap(() => {
-				console.log('get patient epic');
 
 				let headers = new Headers();
 				headers.append('Content-Type', 'application/json');
 
 				let currentUserUid = this.afAuth.auth.currentUser.uid;
+				// let currentUserUid = localStorage.getItem('token');
 
-			return	this.http.get('http://localhost:5000/patient-tracker-b35bc/us-central1/getPatients/?uid=' + currentUserUid)
+				// local url
+				// 'http://localhost:5000/patient-tracker-b35bc/us-central1/getPatients/?uid='	
+				let getUrl = "https://us-central1-patient-tracker-b35bc.cloudfunctions.net/getPatients/?uid="
+				return this.http.get(getUrl + currentUserUid)
 					.switchMap((res => {
-
-						console.log('GET RES : ',res.json());
 						let patientUids = Object.keys(res.json())
-						console.log('GET PATIENT UIDS !',patientUids);
 
-					return	this.http.get('http://localhost:5000/patient-tracker-b35bc/us-central1/fetchPatients/?patientUids=' + patientUids)
+						// local url
+						// 'http://localhost:5000/patient-tracker-b35bc/us-central1/fetchPatients/?patientUids='
+						let url = "https://us-central1-patient-tracker-b35bc.cloudfunctions.net/fetchPatients/?patientUids="
+						return this.http.get(url + patientUids)
 							.switchMap((res => {
-
-								console.log('FETCH RES !', res.json());
-
-								return Observable.of({type: GET_PATIENT_SUCCESS,payload : res.json()})
+								return Observable.of({ type: GET_PATIENT_SUCCESS, payload: res.json() })
 							}))
 					}))
 			})
 	}
 
-	EditPatient = (actions$ :ActionsObservable<any>)=>{
+	EditPatient = (actions$: ActionsObservable<any>) => {
+
 		return actions$.ofType(EDIT)
-		.switchMap(({payload})=>{
-			let headers = new Headers;
-			headers.append('Content-Type','application/json');
-			console.log('edit epic',payload);
-			
-			let currentUserUid = this.afAuth.auth.currentUser.uid;
-			this.http.post('http://localhost:5000/patient-tracker-b35bc/us-central1/editPatient',payload)
-			.subscribe(res => {
-				console.log(res);
-				
+			.switchMap(({ payload }) => {
+				let headers = new Headers;
+				headers.append('Content-Type', 'application/json');
+
+				let currentUserUid = this.afAuth.auth.currentUser.uid;
+				// local url
+				// 'http://localhost:5000/patient-tracker-b35bc/us-central1/editPatient'
+				let url = "https://us-central1-patient-tracker-b35bc.cloudfunctions.net/editPatient"
+				this.http.post(url, payload)
+					.subscribe(res => {
+						// console.log(res);
+
+					})
+				return Observable.of()
 			})
-			return Observable.of()
-		})
 	}
 
-	DeletePatient = (actions$ : ActionsObservable<any>)=>{
+	DeletePatient = (actions$: ActionsObservable<any>) => {
 		return actions$.ofType(DELETE)
-		.switchMap(({payload , navCtrl})=>{
-			let headers = new Headers;
-			headers.append('Content-Type','application/json');
-			// let deleteUrl = 'http://localhost:5000/patient-tracker-b35bc/us-central1/deletePatient';
-			console.log('delete epic',payload);
-		    let uid = payload.userId;
-			payload.currentUserId = this.afAuth.auth.currentUser.uid;
-		return	this.http.post('http://localhost:5000/patient-tracker-b35bc/us-central1/deletePatient',payload)
-		.switchMap(res => {
-				console.log(res);
-                navCtrl()
-				return Observable.of({type : DELETE_SUCCESS, payload :uid})
-			})
-			// ,(err)=>{
-            //     return Observable.of()
-			})
-		
-		// })
-	}
+			.switchMap(({ payload, navCtrl }) => {
+				let headers = new Headers;
+				headers.append('Content-Type', 'application/json');
+				// let deleteUrl = 'http://localhost:5000/patient-tracker-b35bc/us-central1/deletePatient';
+				let uid = payload.userId;
+				payload.currentUserId = this.afAuth.auth.currentUser.uid;
+				// local url
+				// 'http://localhost:5000/patient-tracker-b35bc/us-central1/deletePatient'
+				let url = "https://us-central1-patient-tracker-b35bc.cloudfunctions.net/deletePatient";
+				return this.http.post(url, payload)
+					.switchMap(res => {
 
-	// getRealtimePatient = (actions$ : ActionsObservable<any>)=>{
-	// 	return actions$.ofType(DELETE)
-	// 	.switchMap(() => {
-	// 		let headers = new Headers;
-	// 		headers.append('Content-type','application/json');
-	// 		return Observable.of()
-	// 	})
-// }
+						navCtrl()
+						return Observable.of({ type: DELETE_SUCCESS, payload: uid })
+					})
+			})
+	}
 }

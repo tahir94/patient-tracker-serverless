@@ -5,12 +5,7 @@ import { NgRedux } from "ng2-redux";
 import { AppState } from "../../reducers/rootReducer";
 import { ADD_PATIENT } from "../../actions/patient";
 import { AngularFireAuth } from "angularfire2/auth";
-/**
- * Generated class for the PatientFormPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+
 
 @IonicPage()
 @Component({
@@ -52,7 +47,7 @@ export class PatientFormPage implements OnInit {
 		 payload : this.patientForm.value,
 		 navCtrl : () => this.navCtrl.pop() 
 	 })
-	//  this.patientForm.reset();
+	 this.patientForm.reset();
   }
 
   
